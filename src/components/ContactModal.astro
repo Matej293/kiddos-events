@@ -1,0 +1,335 @@
+---
+
+---
+
+<input type="checkbox" id="contact-toggle" class="contact-toggle-input" aria-hidden="true" />
+
+<div class="contact-overlay" role="dialog" aria-label="Kontakt obrazac" aria-modal="true">
+  <label for="contact-toggle" class="contact-backdrop" aria-label="Zatvori"></label>
+
+  <div class="contact-modal">
+    <div class="contact-modal-header">
+      <h3>Javite nam se</h3>
+      <label for="contact-toggle" class="contact-close" aria-label="Zatvori obrazac">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M15 5L5 15M5 5l10 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+      </label>
+    </div>
+
+    <p class="contact-intro">
+      Ispunite obrazac i javit ćemo vam se u najkraćem roku.
+    </p>
+
+    <form id="contact-form" action="/api/contact" method="POST" class="contact-form">
+      <div class="hp-field" aria-hidden="true">
+        <label for="website_url">Website</label>
+        <input type="text" id="website_url" name="website_url" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <div class="form-group">
+        <label for="contact-name" class="form-label">Ime i prezime</label>
+        <input
+          type="text"
+          id="contact-name"
+          name="name"
+          required
+          maxlength="100"
+          autocomplete="name"
+          placeholder="Ana Horvat"
+          class="form-input"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="contact-email" class="form-label">E-mail</label>
+        <input
+          type="email"
+          id="contact-email"
+          name="email"
+          required
+          maxlength="254"
+          autocomplete="email"
+          placeholder="ana@primjer.hr"
+          class="form-input"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="contact-service" class="form-label">Vrsta usluge</label>
+        <select id="contact-service" name="service" required class="form-input form-select">
+          <option value="" disabled selected>Odaberite uslugu</option>
+          <option value="soft-play">Soft play igraonica</option>
+          <option value="rodjendan">Rođendan</option>
+          <option value="vjencanje">Vjenčanje</option>
+          <option value="ostalo">Ostalo</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="contact-message" class="form-label">Poruka</label>
+        <textarea
+          id="contact-message"
+          name="message"
+          rows="4"
+          required
+          maxlength="2000"
+          placeholder="Opišite vaš event, datum, broj djece..."
+          class="form-input form-textarea"
+        ></textarea>
+      </div>
+
+      <button type="submit" class="btn-primary form-submit">
+        Pošalji upit
+      </button>
+
+      <p class="form-consent">
+        Slanjem upita prihvaćate naše
+        <a href="/opci-uvjeti" target="_blank" rel="noopener noreferrer">Opće uvjete korištenja</a>
+        i
+        <a href="/politika-privatnosti" target="_blank" rel="noopener noreferrer">Politiku privatnosti</a>.
+      </p>
+
+      <div id="form-status" class="form-status" aria-live="polite"></div>
+    </form>
+  </div>
+</div>
+
+<style>
+  .contact-toggle-input {
+    display: none;
+  }
+
+  /* bots fill this; humans never see it */
+  .hp-field {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    opacity: 0;
+    height: 0;
+    width: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .contact-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .contact-toggle-input:checked ~ .contact-overlay {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .contact-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(44, 44, 44, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    cursor: pointer;
+  }
+
+  .contact-modal {
+    position: relative;
+    background-color: var(--cream);
+    border-radius: var(--radius-brand);
+    padding: 40px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow:
+      0 4px 12px rgba(44, 44, 44, 0.08),
+      0 24px 64px rgba(44, 44, 44, 0.16);
+    transform: translateY(12px);
+    transition: transform 0.3s ease;
+  }
+
+  .contact-toggle-input:checked ~ .contact-overlay .contact-modal {
+    transform: translateY(0);
+  }
+
+  .contact-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .contact-modal-header h3 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--dark);
+  }
+
+  .contact-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: var(--charcoal-gray);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .contact-close:hover {
+    background-color: rgba(186, 168, 152, 0.15);
+  }
+
+  .contact-intro {
+    font-size: 0.9rem;
+    color: var(--charcoal-gray);
+    margin-bottom: 28px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 0.825rem;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 6px;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--dark);
+    background-color: rgba(253, 251, 247, 0.8);
+    border: 1.5px solid rgba(186, 168, 152, 0.4);
+    border-radius: 14px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .form-input::placeholder {
+    color: var(--taupe);
+  }
+
+  .form-input:focus {
+    border-color: var(--sky-blue);
+    box-shadow: 0 0 0 3px rgba(141, 216, 236, 0.2);
+  }
+
+  .form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%236B6B6B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 44px;
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .form-submit {
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  .form-consent {
+    margin-top: 12px;
+    font-size: 0.775rem;
+    color: var(--taupe);
+    text-align: center;
+    line-height: 1.55;
+    max-width: none;
+  }
+
+  .form-consent a {
+    color: var(--charcoal-gray);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s ease;
+  }
+
+  .form-consent a:hover {
+    color: var(--dark);
+  }
+
+  .form-status {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    min-height: 24px;
+  }
+
+  .form-status.success {
+    color: var(--sage-green);
+  }
+
+  .form-status.error {
+    color: #D46B6B;
+  }
+
+  @media (max-width: 480px) {
+    .contact-modal {
+      padding: 28px 20px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-overlay,
+    .contact-modal {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const status = document.getElementById('form-status') as HTMLDivElement;
+  const submitBtn = form?.querySelector('.form-submit') as HTMLButtonElement;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    status.textContent = 'Šaljem...';
+    status.className = 'form-status';
+    submitBtn.disabled = true;
+
+    try {
+      const formData = new FormData(form);
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        status.textContent = 'Hvala! Vaš upit je poslan. Javit ćemo vam se uskoro.';
+        status.className = 'form-status success';
+        form.reset();
+      } else {
+        status.textContent = data.error || 'Došlo je do greške. Pokušajte ponovo.';
+        status.className = 'form-status error';
+      }
+    } catch {
+      status.textContent = 'Greška u mreži. Provjerite vezu i pokušajte ponovo.';
+      status.className = 'form-status error';
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+</script>

@@ -1,0 +1,113 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout
+  title="Opći uvjeti korištenja | Kiddos Events"
+  description="Opći uvjeti korištenja web stranice Kiddos Events."
+>
+  <Navigation />
+  <main>
+    <section class="legal-hero">
+      <div class="container">
+        <span class="section-tag">Pravni dokumenti</span>
+        <h1>Opći uvjeti korištenja web stranice</h1>
+        <p class="legal-meta">Kiddos Events d.o.o.</p>
+      </div>
+    </section>
+
+    <section class="legal-content section">
+      <div class="container legal-body">
+        <p class="placeholder-notice">
+          Sadržaj ovog dokumenta bit će uskoro dostupan.
+        </p>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .legal-hero {
+    padding: 120px 0 48px;
+    background:
+      radial-gradient(ellipse at 20% 60%, rgba(141, 216, 236, 0.06) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 30%, rgba(247, 217, 106, 0.04) 0%, transparent 55%),
+      var(--cream);
+    border-bottom: 1px solid rgba(186, 168, 152, 0.2);
+  }
+
+  .legal-hero .section-tag {
+    margin-bottom: 20px;
+  }
+
+  .legal-hero h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--dark);
+    margin-bottom: 12px;
+    max-width: 720px;
+  }
+
+  .legal-meta {
+    font-size: 0.875rem;
+    color: var(--taupe);
+    max-width: none;
+  }
+
+  .legal-content {
+    background: var(--cream);
+  }
+
+  .legal-body {
+    max-width: 760px;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--charcoal-gray);
+  }
+
+  .legal-body h2 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-top: 40px;
+    margin-bottom: 12px;
+  }
+
+  .legal-body h3 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-top: 28px;
+    margin-bottom: 8px;
+  }
+
+  .legal-body p {
+    margin-bottom: 16px;
+  }
+
+  .legal-body ul,
+  .legal-body ol {
+    padding-left: 24px;
+    margin-bottom: 16px;
+  }
+
+  .legal-body li {
+    margin-bottom: 6px;
+  }
+
+  .placeholder-notice {
+    color: var(--taupe);
+    font-style: italic;
+    font-size: 1rem;
+    padding: 32px 0;
+    max-width: none;
+  }
+</style>

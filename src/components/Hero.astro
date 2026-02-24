@@ -1,0 +1,335 @@
+---
+
+---
+
+<section class="hero section">
+  <div class="hero-decoration" aria-hidden="true">
+    <div class="deco-blob deco-pink"></div>
+    <div class="deco-blob deco-yellow"></div>
+    <div class="deco-blob deco-sage"></div>
+    <div class="deco-blob deco-sky"></div>
+  </div>
+
+  <svg class="hero-noise" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <filter id="hero-noise-filter" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="4" stitchTiles="stitch" result="noise"/>
+      <feColorMatrix type="saturate" values="0" in="noise" result="gray"/>
+      <feBlend in="SourceGraphic" in2="gray" mode="multiply"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#hero-noise-filter)" opacity="0.032"/>
+  </svg>
+
+  <div class="container hero-content">
+    <span class="hero-badge fade-in-up">Dječji eventi s ljubavlju</span>
+    <h1 class="hero-title fade-in-up" style="animation-delay: 0.1s;">
+      Svaki trenutak<br />
+      <span class="hero-highlight-wrapper">
+        <span
+          class="hero-highlight hero-highlight--active"
+          data-index="0"
+          style="color: var(--sky-blue);">pretvaramo u čaroliju</span
+        >
+        <span
+          class="hero-highlight"
+          data-index="1"
+          style="color: var(--soft-pink);">činimo nezaboravnim</span
+        >
+        <span
+          class="hero-highlight"
+          data-index="2"
+          style="color: var(--butter-yellow);">gradimo s pažnjom</span
+        >
+        <span class="hero-highlight" data-index="3" style="color: var(--peach);"
+          >bojimo osmijehom</span
+        >
+      </span>
+    </h1>
+    <p class="hero-text fade-in-up" style="animation-delay: 0.2s;">
+      Organiziramo nezaboravne dječje rođendane, igraonice i zabavu na
+      vjenčanjima. Prepustite nam planiranje, vi uživajte.
+    </p>
+    <div class="hero-actions fade-in-up" style="animation-delay: 0.3s;">
+      <a href="/usluge" class="btn-primary">Pogledaj usluge</a>
+      <a href="/o-nama" class="btn-secondary">Saznaj više</a>
+    </div>
+  </div>
+
+  <div class="confetti" aria-hidden="true">
+    <span class="dot dot-1"></span>
+    <span class="dot dot-2"></span>
+    <span class="dot dot-3"></span>
+    <span class="dot dot-4"></span>
+    <span class="dot dot-5"></span>
+    <span class="dot dot-6"></span>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    padding-top: 120px;
+    overflow: clip;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    padding: 8px 20px;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--dark);
+    background-color: var(--butter-yellow);
+    border-radius: var(--radius-pill);
+    margin-bottom: 24px;
+  }
+
+  .hero-title {
+    margin-bottom: 24px;
+    max-width: 700px;
+  }
+
+  .hero-highlight-wrapper {
+    position: relative;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    overflow: visible;
+    min-height: 1.2em;
+  }
+
+  .hero-highlight {
+    position: absolute;
+    opacity: 0;
+    transform: translateY(100%);
+    transition:
+      opacity 0.5s ease,
+      transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    white-space: nowrap;
+  }
+
+  .hero-highlight--active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .hero-highlight--exit {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  .hero-text {
+    font-size: 1.15rem;
+    color: var(--charcoal-gray);
+    margin-bottom: 40px;
+    max-width: 540px;
+    text-align: center;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hero-decoration {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .deco-blob {
+    position: absolute;
+    filter: blur(56px);
+  }
+
+  .deco-pink {
+    width: 520px;
+    height: 400px;
+    background-color: var(--soft-pink);
+    opacity: 0.22;
+    top: 2%;
+    left: -10%;
+    border-radius: 62% 38% 34% 66% / 58% 32% 68% 42%;
+  }
+
+  .deco-yellow {
+    width: 340px;
+    height: 290px;
+    background-color: var(--butter-yellow);
+    opacity: 0.18;
+    top: 12%;
+    right: 0%;
+    border-radius: 32% 68% 72% 28% / 52% 62% 38% 48%;
+  }
+
+  .deco-sage {
+    width: 320px;
+    height: 270px;
+    background-color: var(--sage-green);
+    opacity: 0.14;
+    bottom: 4%;
+    left: 26%;
+    border-radius: 44% 56% 38% 62% / 64% 38% 62% 36%;
+  }
+
+  .deco-sky {
+    width: 220px;
+    height: 260px;
+    background-color: var(--sky-blue);
+    opacity: 0.12;
+    top: 38%;
+    right: 18%;
+    border-radius: 52% 48% 28% 72% / 42% 64% 36% 58%;
+  }
+
+  .hero-noise {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .confetti {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .dot {
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  .dot-1 {
+    width: 10px;
+    height: 10px;
+    background-color: var(--soft-pink);
+    opacity: 0.5;
+    top: 18%;
+    left: 12%;
+  }
+
+  .dot-2 {
+    width: 7px;
+    height: 7px;
+    background-color: var(--sky-blue);
+    opacity: 0.6;
+    top: 30%;
+    right: 15%;
+  }
+
+  .dot-3 {
+    width: 12px;
+    height: 12px;
+    background-color: var(--butter-yellow);
+    opacity: 0.45;
+    top: 55%;
+    left: 8%;
+  }
+
+  .dot-4 {
+    width: 8px;
+    height: 8px;
+    background-color: var(--peach);
+    opacity: 0.5;
+    bottom: 25%;
+    right: 10%;
+  }
+
+  .dot-5 {
+    width: 6px;
+    height: 6px;
+    background-color: var(--sage-green);
+    opacity: 0.55;
+    top: 15%;
+    right: 30%;
+  }
+
+  .dot-6 {
+    width: 9px;
+    height: 9px;
+    background-color: var(--soft-pink);
+    opacity: 0.4;
+    bottom: 15%;
+    left: 25%;
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      min-height: 70vh;
+      padding-top: 100px;
+    }
+
+    .hero-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .deco-blob {
+      filter: blur(40px);
+    }
+
+    .deco-pink {
+      width: 260px;
+      height: 200px;
+    }
+
+    .deco-yellow {
+      width: 180px;
+      height: 160px;
+    }
+
+    .deco-sage,
+    .deco-sky {
+      width: 160px;
+      height: 140px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-highlight {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const highlights = document.querySelectorAll<HTMLElement>(".hero-highlight");
+  if (highlights.length > 1) {
+    let current = 0;
+    const total = highlights.length;
+
+    setInterval(() => {
+      const prev = current;
+      current = (current + 1) % total;
+
+      highlights[prev].classList.remove("hero-highlight--active");
+      highlights[prev].classList.add("hero-highlight--exit");
+
+      setTimeout(() => {
+        highlights[prev].classList.remove("hero-highlight--exit");
+      }, 600);
+
+      highlights[current].classList.add("hero-highlight--active");
+    }, 2500);
+  }
+</script>

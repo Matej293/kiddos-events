@@ -1,0 +1,691 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navigation from "../components/Navigation.astro";
+import Hero from "../components/Hero.astro";
+import Footer from "../components/Footer.astro";
+import { Image } from "astro:assets";
+
+import onama01 from "../assets/gallery/o-nama-01.jpg";
+import igraonica01 from "../assets/gallery/igraonica-01.jpeg";
+import rodendan02 from "../assets/gallery/rodendan-02.jpg";
+import igraonica15 from "../assets/gallery/igraonica-15.jpg";
+---
+
+<Layout
+  title="Kiddos Events | Dječji eventi, rođendani i igraonice"
+  description="Organiziramo nezaboravne dječje rođendane, soft play igraonice i zabavu za djecu na vjenčanjima. Prepustite nam planiranje - vi uživajte u smijehu."
+>
+  <Navigation />
+  <main class="home-main">
+    <div class="page-confetti" aria-hidden="true">
+      <div class="pc-blob pc-pink"></div>
+      <div class="pc-blob pc-yellow"></div>
+      <div class="pc-blob pc-sage"></div>
+      <div class="pc-blob pc-sky"></div>
+
+      <span
+        class="pc-dot"
+        style="width:10px;height:10px;top:28%;left:4%;background:var(--soft-pink);opacity:0.5;"
+      ></span>
+      <span
+        class="pc-dot"
+        style="width:7px;height:7px;top:38%;left:2%;background:var(--butter-yellow);opacity:0.45;"
+      ></span>
+      <span
+        class="pc-dot"
+        style="width:12px;height:12px;top:50%;left:7%;background:var(--sky-blue);opacity:0.35;"
+      ></span>
+      <span
+        class="pc-dot"
+        style="width:8px;height:8px;top:61%;left:3%;background:var(--sage-green);opacity:0.45;"
+      ></span>
+      <span
+        class="pc-dot"
+        style="width:9px;height:9px;top:74%;left:6%;background:var(--soft-pink);opacity:0.4;"
+      ></span>
+      <span
+        class="pc-dot"
+        style="width:7px;height:7px;top:84%;left:4%;background:var(--peach);opacity:0.4;"
+      ></span>
+      <span
+        class="pc-dot"
+        style="width:11px;height:11px;top:92%;left:9%;background:var(--butter-yellow);opacity:0.35;"
+      ></span>
+
+      <span
+        class="pc-dot"
+        style="width:8px;height:8px;top:24%;right:5%;background:var(--butter-yellow);opacity:0.5;"
+      ></span>
+      <span
+        class="pc-dot"
+        style="width:11px;height:11px;top:36%;right:3%;background:var(--peach);opacity:0.4;"
+      ></span>
+      <span
+        class="pc-dot"
+        style="width:7px;height:7px;top:47%;right:6%;background:var(--sky-blue);opacity:0.45;"
+      ></span>
+      <span
+        class="pc-dot"
+        style="width:13px;height:13px;top:58%;right:4%;background:var(--soft-pink);opacity:0.35;"
+      ></span>
+      <span
+        class="pc-dot"
+        style="width:9px;height:9px;top:70%;right:7%;background:var(--butter-yellow);opacity:0.4;"
+      ></span>
+      <span
+        class="pc-dot"
+        style="width:6px;height:6px;top:81%;right:5%;background:var(--sage-green);opacity:0.45;"
+      ></span>
+      <span
+        class="pc-dot"
+        style="width:10px;height:10px;top:90%;right:9%;background:var(--sky-blue);opacity:0.35;"
+      ></span>
+
+      <span
+        class="pc-dot"
+        style="width:6px;height:6px;top:33%;left:14%;background:var(--sage-green);opacity:0.4;"
+      ></span>
+      <span
+        class="pc-dot"
+        style="width:8px;height:8px;top:54%;right:13%;background:var(--butter-yellow);opacity:0.38;"
+      ></span>
+      <span
+        class="pc-dot"
+        style="width:7px;height:7px;top:66%;left:11%;background:var(--sky-blue);opacity:0.38;"
+      ></span>
+      <span
+        class="pc-dot"
+        style="width:6px;height:6px;top:78%;right:11%;background:var(--soft-pink);opacity:0.4;"
+      ></span>
+
+      <span
+        class="pc-diamond"
+        style="width:8px;height:8px;top:42%;left:9%;background:var(--butter-yellow);opacity:0.38;"
+      ></span>
+      <span
+        class="pc-diamond"
+        style="width:6px;height:6px;top:63%;right:10%;background:var(--sky-blue);opacity:0.38;"
+      ></span>
+      <span
+        class="pc-diamond"
+        style="width:7px;height:7px;top:85%;left:17%;background:var(--soft-pink);opacity:0.35;"
+      ></span>
+    </div>
+
+    <Hero />
+
+    <section class="section about-preview">
+      <div class="container about-preview-grid">
+        <div class="about-preview-image img-wrap">
+          <Image
+            src={onama01}
+            alt="Kiddos Events tim s djecom"
+            width={480}
+            height={340}
+            loading="lazy"
+            class="about-preview-img"
+          />
+        </div>
+        <div class="about-preview-content">
+          <span class="section-tag">O nama</span>
+          <h2>Radost je naša misija</h2>
+          <p>
+            Kiddos Events je mali tim zaljubljenika u dječji smijeh. Stvaramo
+            sigurna, kreativna i zabavna iskustva za najmlađe, od igraonica do
+            potpune organizacije rođendana.
+          </p>
+          <a href="/o-nama" class="btn-secondary">Saznaj više o nama</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section gallery-preview">
+      <div class="container">
+        <div class="gallery-preview-header">
+          <span class="section-tag">Galerija</span>
+          <h2>Trenutci koji govore više od riječi</h2>
+        </div>
+        <div class="gallery-preview-row">
+          <div class="gallery-preview-item img-wrap">
+            <Image
+              src={igraonica01}
+              alt="Dijete u dvorcu na napuhavanje u igraonici"
+              width={380}
+              height={280}
+              loading="lazy"
+              class="gallery-preview-img"
+            />
+          </div>
+          <div class="gallery-preview-item img-wrap">
+            <Image
+              src={rodendan02}
+              alt="Djeca s oslikanim licima na rođendanu"
+              width={380}
+              height={280}
+              loading="lazy"
+              class="gallery-preview-img"
+            />
+          </div>
+          <div class="gallery-preview-item img-wrap">
+            <Image
+              src={igraonica15}
+              alt="Kiddos Events vanjski set s lopticama"
+              width={380}
+              height={280}
+              loading="lazy"
+              class="gallery-preview-img"
+              style={{ objectPosition: "center 20%" }}
+            />
+          </div>
+        </div>
+        <div class="gallery-preview-link">
+          <a href="/galerija" class="btn-secondary">Pogledaj galeriju</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section services-preview">
+      <div class="container">
+        <div class="services-preview-header">
+          <span class="section-tag">Usluge</span>
+          <h2>Što sve radimo</h2>
+        </div>
+        <div class="services-preview-grid">
+          <a href="/usluge#soft-play" class="sp-card">
+            <div
+              class="sp-card-icon"
+              style="background-color: rgba(242, 190, 206, 0.15); border: 1px solid rgba(242, 190, 206, 0.35);"
+            >
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 28 28"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  d="M4 23 L4 13 C4 7 24 7 24 13 L24 23"
+                  stroke="#F2BECE"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"></path>
+                <line
+                  x1="2"
+                  y1="23"
+                  x2="26"
+                  y2="23"
+                  stroke="#F2BECE"
+                  stroke-width="2"
+                  stroke-linecap="round"></line>
+                <circle cx="10" cy="19" r="2.5" fill="rgba(242,190,206,0.8)"
+                ></circle>
+                <circle cx="18" cy="19" r="2.5" fill="rgba(141,216,236,0.8)"
+                ></circle>
+                <circle cx="14" cy="15" r="2.2" fill="rgba(247,217,106,0.9)"
+                ></circle>
+              </svg>
+            </div>
+            <h3>Soft play igraonica</h3>
+            <p>
+              Mekana, sigurna igraonica za najmlađe. Puna tobogana, loptica i
+              kreativnih aktivnosti.
+            </p>
+            <span class="sp-card-arrow">Saznaj više →</span>
+          </a>
+          <a href="/usluge#rodendani" class="sp-card">
+            <div
+              class="sp-card-icon"
+              style="background-color: rgba(247, 217, 106, 0.15); border: 1px solid rgba(247, 217, 106, 0.35);"
+            >
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 28 28"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <rect
+                  x="5"
+                  y="13"
+                  width="18"
+                  height="8"
+                  rx="2"
+                  stroke="#F7D96A"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"></rect>
+
+                <path
+                  d="M7 13 C7 10 21 10 21 13"
+                  stroke="#F7D96A"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"></path>
+
+                <line
+                  x1="14"
+                  y1="8"
+                  x2="14"
+                  y2="12"
+                  stroke="#8DD8EC"
+                  stroke-width="2"
+                  stroke-linecap="round"></line>
+
+                <path
+                  d="M14 6 C15.2 7.2 15.2 8.2 14 9 C12.8 8.2 12.8 7.2 14 6 Z"
+                  fill="rgba(242,190,206,0.9)"></path>
+
+                <circle cx="10" cy="17" r="1.5" fill="rgba(141,216,236,0.8)"
+                ></circle>
+                <circle cx="18" cy="17" r="1.5" fill="rgba(242,190,206,0.8)"
+                ></circle>
+              </svg>
+            </div>
+            <h3>Rođendani</h3>
+            <p>
+              Face painting, kreativne radionice i sportske igre. Vi slavite, mi
+              brinemo.
+            </p>
+            <span class="sp-card-arrow">Saznaj više →</span>
+          </a>
+          <a href="/usluge#vjencanja" class="sp-card">
+            <div
+              class="sp-card-icon"
+              style="background-color: rgba(242, 196, 162, 0.15); border: 1px solid rgba(242, 196, 162, 0.35);"
+            >
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 28 28"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <circle cx="11" cy="15" r="5" stroke="#F2C4A2" stroke-width="2"
+                ></circle>
+
+                <circle cx="17" cy="13" r="5" stroke="#BAA898" stroke-width="2"
+                ></circle>
+
+                <circle cx="17" cy="7.5" r="1.8" fill="rgba(242,190,206,0.9)"
+                ></circle>
+
+                <circle cx="11" cy="15" r="2" fill="rgba(141,216,236,0.25)"
+                ></circle>
+              </svg>
+            </div>
+            <h3>Vjenčanja</h3>
+            <p>
+              Profesionalna zabava za djecu na vjenčanjima, prilagođeno temi i
+              personalizirano.
+            </p>
+            <span class="sp-card-arrow">Saznaj više →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-cta">
+      <div class="container home-cta-content">
+        <h2>Spremi se za zabavu!</h2>
+        <p>Javite nam se i zajedno osmislimo savršen event za vaše mališane.</p>
+        <label
+          for="contact-toggle"
+          class="btn-primary"
+          role="button"
+          tabindex="0"
+        >
+          Kontaktirajte nas
+        </label>
+      </div>
+    </section>
+  </main>
+  <Footer />
+
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      name: "Kiddos Events",
+      description:
+        "Organizacija dječjih evenata, rođendana, soft play igraonica i zabave za djecu na vjenčanjima.",
+      url: "https://kiddos-events.hr",
+      telephone: "+385991234567",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Zagreb",
+        addressCountry: "HR",
+      },
+      openingHours: "Mo-Fr 09:00-18:00",
+      image: "https://kiddos-events.hr/og-image.jpg",
+    })}
+  />
+</Layout>
+
+<style>
+  .home-main {
+    position: relative;
+    overflow: clip;
+  }
+
+  .page-confetti {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: clip;
+  }
+
+  /* multiply blend tints section colours without obscuring content */
+  .pc-blob {
+    position: absolute;
+    mix-blend-mode: multiply;
+    filter: blur(110px);
+  }
+
+  .pc-pink {
+    width: 700px;
+    height: 580px;
+    background-color: var(--soft-pink);
+    opacity: 0.16;
+    top: 8%;
+    left: -18%;
+    border-radius: 62% 38% 34% 66% / 58% 32% 68% 42%;
+  }
+
+  .pc-yellow {
+    width: 560px;
+    height: 460px;
+    background-color: var(--butter-yellow);
+    opacity: 0.13;
+    top: 34%;
+    right: -14%;
+    border-radius: 35% 65% 60% 40% / 50% 40% 60% 50%;
+  }
+
+  .pc-sage {
+    width: 500px;
+    height: 430px;
+    background-color: var(--sage-green);
+    opacity: 0.11;
+    top: 60%;
+    left: 12%;
+    border-radius: 46% 54% 38% 62% / 62% 44% 56% 38%;
+  }
+
+  .pc-sky {
+    width: 440px;
+    height: 380px;
+    background-color: var(--sky-blue);
+    opacity: 0.1;
+    top: 80%;
+    right: 8%;
+    border-radius: 54% 46% 66% 34% / 42% 60% 40% 58%;
+  }
+
+  .pc-dot {
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  .pc-diamond {
+    position: absolute;
+    transform: rotate(45deg);
+    border-radius: 2px;
+  }
+
+  .about-preview {
+    background:
+      radial-gradient(
+        ellipse at 80% 30%,
+        rgba(242, 190, 206, 0.07) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse at 20% 70%,
+        rgba(186, 218, 144, 0.05) 0%,
+        transparent 50%
+      ),
+      var(--cream-pink);
+  }
+
+  .about-preview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 56px;
+    align-items: center;
+  }
+
+  .about-preview-image {
+    border-radius: var(--radius-brand);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+
+  .about-preview-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .about-preview-content h2 {
+    margin-bottom: 16px;
+  }
+
+  .about-preview-content p {
+    color: var(--charcoal-gray);
+    margin-bottom: 24px;
+  }
+
+  .about-preview-stats {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 28px;
+  }
+
+  .mini-stat {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mini-stat-num {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.2;
+  }
+
+  .mini-stat-label {
+    font-size: 0.8rem;
+    color: var(--taupe);
+  }
+
+  .gallery-preview {
+    background:
+      radial-gradient(
+        ellipse at 20% 60%,
+        rgba(141, 216, 236, 0.05) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse at 80% 30%,
+        rgba(247, 217, 106, 0.04) 0%,
+        transparent 50%
+      ),
+      var(--cream);
+  }
+
+  .gallery-preview-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .gallery-preview-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .gallery-preview-item {
+    border-radius: var(--radius-brand);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    transition:
+      box-shadow 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  .gallery-preview-item:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-4px);
+  }
+
+  .gallery-preview-img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .gallery-preview-link {
+    text-align: center;
+    margin-top: 36px;
+  }
+
+  .services-preview {
+    background:
+      radial-gradient(
+        ellipse at 50% 50%,
+        rgba(247, 217, 106, 0.06) 0%,
+        transparent 50%
+      ),
+      var(--cream-yellow);
+  }
+
+  .services-preview-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .services-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .sp-card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--cream);
+    border: 1px solid rgba(186, 168, 152, 0.3);
+    border-radius: var(--radius-brand);
+    padding: 32px 24px;
+    box-shadow: var(--shadow-card);
+    transition:
+      box-shadow 0.3s ease,
+      transform 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .sp-card:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-4px);
+  }
+
+  .sp-card-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    font-size: 1.4rem;
+  }
+
+  .sp-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+  }
+
+  .sp-card p {
+    font-size: 0.9rem;
+    color: var(--charcoal-gray);
+    line-height: 1.65;
+    flex-grow: 1;
+    margin-bottom: 16px;
+  }
+
+  .sp-card-arrow {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--sky-blue);
+    transition: opacity 0.2s ease;
+  }
+
+  .sp-card:hover .sp-card-arrow {
+    opacity: 0.75;
+  }
+
+  .home-cta {
+    background:
+      radial-gradient(
+        ellipse at 50% 50%,
+        rgba(242, 196, 162, 0.08) 0%,
+        transparent 50%
+      ),
+      var(--cream-peach);
+    padding: 64px 0;
+  }
+
+  .home-cta-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .home-cta-content p {
+    color: var(--charcoal-gray);
+    margin-bottom: 8px;
+  }
+
+  @media (max-width: 768px) {
+    .about-preview-grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .gallery-preview-row {
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .gallery-preview-row .gallery-preview-item:last-child {
+      display: none;
+    }
+
+    .services-preview-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gallery-preview-item,
+    .sp-card {
+      transition: none;
+    }
+    .gallery-preview-item:hover,
+    .sp-card:hover {
+      transform: none;
+    }
+  }
+</style>

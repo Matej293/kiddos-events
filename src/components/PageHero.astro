@@ -1,0 +1,150 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  accentColor?: string;
+  bgTint?: string;
+}
+
+const {
+  title,
+  subtitle,
+  accentColor = 'var(--soft-pink)',
+  bgTint = 'var(--cream-pink)',
+} = Astro.props;
+---
+
+<section class="page-hero" style={`--hero-bg: ${bgTint}; --hero-accent: ${accentColor};`}>
+  <div class="page-hero-decoration" aria-hidden="true">
+    <div class="page-hero-blob page-hero-blob--1"></div>
+    <div class="page-hero-blob page-hero-blob--2"></div>
+  </div>
+
+  <div class="container page-hero-content">
+    <h1 class="page-hero-title fade-in-up">{title}</h1>
+    {subtitle && <p class="page-hero-subtitle fade-in-up" style="animation-delay: 0.1s;">{subtitle}</p>}
+  </div>
+
+  <div class="page-hero-dots" aria-hidden="true">
+    <span class="ph-dot ph-dot-1"></span>
+    <span class="ph-dot ph-dot-2"></span>
+    <span class="ph-dot ph-dot-3"></span>
+    <span class="ph-dot ph-dot-4"></span>
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    position: relative;
+    padding: 160px 0 80px;
+    background-color: var(--hero-bg);
+    overflow: clip;
+  }
+
+  .page-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+  }
+
+  .page-hero-title {
+    margin-bottom: 16px;
+  }
+
+  .page-hero-subtitle {
+    font-size: 1.15rem;
+    color: var(--charcoal-gray);
+    max-width: 520px;
+    margin-inline: auto;
+  }
+
+  .page-hero-decoration {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .page-hero-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    background-color: var(--hero-accent);
+  }
+
+  .page-hero-blob--1 {
+    width: 350px;
+    height: 350px;
+    opacity: 0.18;
+    top: -10%;
+    right: -5%;
+  }
+
+  .page-hero-blob--2 {
+    width: 250px;
+    height: 250px;
+    opacity: 0.12;
+    bottom: -20%;
+    left: 10%;
+  }
+
+  .page-hero-dots {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .ph-dot {
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  .ph-dot-1 {
+    width: 8px;
+    height: 8px;
+    background-color: var(--butter-yellow);
+    opacity: 0.5;
+    top: 25%;
+    left: 15%;
+  }
+
+  .ph-dot-2 {
+    width: 6px;
+    height: 6px;
+    background-color: var(--sky-blue);
+    opacity: 0.5;
+    top: 35%;
+    right: 18%;
+  }
+
+  .ph-dot-3 {
+    width: 10px;
+    height: 10px;
+    background-color: var(--soft-pink);
+    opacity: 0.4;
+    bottom: 20%;
+    right: 30%;
+  }
+
+  .ph-dot-4 {
+    width: 7px;
+    height: 7px;
+    background-color: var(--sage-green);
+    opacity: 0.45;
+    bottom: 30%;
+    left: 25%;
+  }
+
+  @media (max-width: 768px) {
+    .page-hero {
+      padding: 120px 0 48px;
+    }
+
+    .page-hero-blob--1,
+    .page-hero-blob--2 {
+      width: 180px;
+      height: 180px;
+    }
+  }
+</style>

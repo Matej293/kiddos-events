@@ -1,0 +1,488 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import PageHero from '../components/PageHero.astro';
+import Footer from '../components/Footer.astro';
+import { Image } from 'astro:assets';
+
+// Dynamically import all gallery images (excluding o-nama images)
+const allImageModules = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/gallery/*.{jpg,jpeg,png}',
+  { eager: true }
+);
+
+type GalleryImage = {
+  src: ImageMetadata;
+  alt: string;
+  category: string;
+  filename: string;
+};
+
+const categoryMap: Record<string, { label: string; alt: string }> = {
+  igraonica: { label: 'Igraonice', alt: 'Soft play igraonica' },
+  rodendan: { label: 'Rođendani', alt: 'Dječji rođendan' },
+  vjencanje: { label: 'Vjenčanja', alt: 'Zabava na vjenčanju' },
+};
+
+const galleryImages: GalleryImage[] = [];
+
+for (const [path, mod] of Object.entries(allImageModules)) {
+  const filename = path.split('/').pop()?.replace(/\.(jpg|jpeg|png)$/, '') ?? '';
+
+  // Skip o-nama images — those are for the About page only
+  if (filename.startsWith('o-nama')) continue;
+
+  const prefix = Object.keys(categoryMap).find((key) => filename.startsWith(key));
+  if (!prefix) continue;
+
+  const meta = categoryMap[prefix];
+  galleryImages.push({
+    src: mod.default,
+    alt: `${meta.alt} - ${filename}`,
+    category: meta.label,
+    filename,
+  });
+}
+
+// Sort for consistent ordering
+galleryImages.sort((a, b) => a.filename.localeCompare(b.filename));
+
+const categories = ['Svi', 'Igraonice', 'Rođendani', 'Vjenčanja'];
+---
+
+<Layout
+  title="Galerija | Kiddos Events"
+  description="Pogledajte fotografije naših dječjih evenata, rođendana, igraonica i zabave na vjenčanjima. Svaka slika priča svoju priču."
+>
+  <Navigation />
+  <main>
+    <PageHero
+      title="Galerija"
+      subtitle="Trenutci koji govore više od riječi. Pogledajte atmosferu naših evenata."
+      accentColor="var(--sky-blue)"
+      bgTint="var(--cream-blue)"
+    />
+
+    <section class="section gallery-section">
+      <div class="container">
+        <!-- Category filter pills -->
+        <div class="gallery-categories" role="tablist" aria-label="Filtriranje galerije">
+          {categories.map((cat, i) => (
+            <button
+              class={`cat-pill ${i === 0 ? 'cat-pill--active' : ''}`}
+              role="tab"
+              aria-selected={i === 0 ? 'true' : 'false'}
+              data-filter={cat}
+              type="button"
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        <!-- Gallery grid -->
+        <div class="gallery-grid" id="gallery-grid">
+          {galleryImages.map((image) => (
+            <button
+              class="gallery-item img-wrap"
+              data-category={image.category}
+              type="button"
+              aria-label={`Povećaj: ${image.alt}`}
+            >
+              <Image
+                src={image.src}
+                alt={image.alt}
+                width={600}
+                height={400}
+                loading="lazy"
+                class="gallery-item-img"
+              />
+              <div class="gallery-item-overlay">
+                <span class="gallery-item-tag">{image.category}</span>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <section class="cta-banner">
+      <div class="container cta-content">
+        <h2>Želite ovakvu zabavu?</h2>
+        <p>Javite nam se i stvorit ćemo nezaboravne trenutke za vaše mališane.</p>
+        <label for="contact-toggle" class="btn-primary" role="button" tabindex="0">
+          Kontaktirajte nas
+        </label>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<!-- Lightbox -->
+<div class="lightbox" id="gallery-lightbox" aria-hidden="true">
+  <button class="lightbox-close" type="button" aria-label="Zatvori">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <button class="lightbox-nav lightbox-prev" type="button" aria-label="Prethodna slika">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="lightbox-nav lightbox-next" type="button" aria-label="Sljedeća slika">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+  <img class="lightbox-img" src="" alt="" />
+</div>
+
+<style>
+  .gallery-section {
+    background:
+      radial-gradient(ellipse at 10% 20%, rgba(141, 216, 236, 0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 80%, rgba(242, 190, 206, 0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(247, 217, 106, 0.03) 0%, transparent 40%),
+      var(--cream);
+  }
+
+  /* Category pills */
+  .gallery-categories {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+  }
+
+  .cat-pill {
+    padding: 8px 20px;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--charcoal-gray);
+    background: none;
+    border: 1.5px solid rgba(186, 168, 152, 0.4);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.15s ease;
+  }
+
+  .cat-pill:hover {
+    border-color: var(--sky-blue);
+    color: var(--dark);
+  }
+
+  .cat-pill:active {
+    transform: scale(0.96);
+  }
+
+  .cat-pill--active {
+    background-color: var(--sky-blue);
+    color: var(--dark);
+    border-color: var(--sky-blue);
+    font-weight: 600;
+  }
+
+  /* Gallery Grid */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .gallery-item {
+    position: relative;
+    border-radius: var(--radius-brand);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    background: none;
+    transition: box-shadow 0.3s ease, transform 0.3s ease, opacity 0.4s ease;
+    aspect-ratio: 3 / 2;
+  }
+
+  .gallery-item:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-4px);
+  }
+
+  .gallery-item[data-hidden="true"] {
+    display: none;
+  }
+
+  .gallery-item.fade-out {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  .gallery-item.fade-in {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .gallery-item-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Hover overlay */
+  .gallery-item-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(44, 44, 44, 0.5) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+  }
+
+  .gallery-item:hover .gallery-item-overlay {
+    opacity: 1;
+  }
+
+  .gallery-item-tag {
+    display: inline-block;
+    padding: 5px 14px;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--cream);
+    background-color: rgba(253, 251, 247, 0.2);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(253, 251, 247, 0.3);
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background-color: rgba(44, 44, 44, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .lightbox[aria-hidden="false"] {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(253, 251, 247, 0.15);
+    border: none;
+    color: var(--cream);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    z-index: 2;
+  }
+
+  .lightbox-close:hover {
+    background: rgba(253, 251, 247, 0.3);
+  }
+
+  .lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(253, 251, 247, 0.15);
+    border: none;
+    color: var(--cream);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    z-index: 2;
+  }
+
+  .lightbox-nav:hover {
+    background: rgba(253, 251, 247, 0.3);
+  }
+
+  .lightbox-prev {
+    left: 20px;
+  }
+
+  .lightbox-next {
+    right: 20px;
+  }
+
+  .lightbox-img {
+    max-width: 90vw;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 12px;
+  }
+
+  /* CTA Banner */
+  .cta-banner {
+    background:
+      radial-gradient(ellipse at 50% 50%, rgba(141, 216, 236, 0.06) 0%, transparent 50%),
+      var(--cream-blue);
+    padding: 64px 0;
+  }
+
+  .cta-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .cta-content p {
+    color: var(--charcoal-gray);
+    margin-bottom: 8px;
+  }
+
+  @media (max-width: 768px) {
+    .gallery-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .gallery-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gallery-item,
+    .gallery-item-overlay,
+    .lightbox,
+    .cat-pill {
+      transition: none;
+    }
+    .gallery-item:hover {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  // === Filter functionality ===
+  const pills = document.querySelectorAll<HTMLButtonElement>('.cat-pill');
+  const items = document.querySelectorAll<HTMLButtonElement>('.gallery-item');
+
+  pills.forEach((pill) => {
+    pill.addEventListener('click', () => {
+      const filter = pill.dataset.filter;
+
+      // Update active pill
+      pills.forEach((p) => {
+        p.classList.remove('cat-pill--active');
+        p.setAttribute('aria-selected', 'false');
+      });
+      pill.classList.add('cat-pill--active');
+      pill.setAttribute('aria-selected', 'true');
+
+      // Animate items
+      items.forEach((item) => {
+        const cat = item.dataset.category;
+        const shouldShow = filter === 'Svi' || cat === filter;
+
+        if (!shouldShow) {
+          item.classList.add('fade-out');
+          item.classList.remove('fade-in');
+          setTimeout(() => {
+            item.dataset.hidden = 'true';
+          }, 250);
+        } else {
+          item.dataset.hidden = 'false';
+          // Trigger reflow then add fade-in
+          requestAnimationFrame(() => {
+            item.classList.remove('fade-out');
+            item.classList.add('fade-in');
+          });
+        }
+      });
+    });
+  });
+
+  // === Lightbox functionality ===
+  const lightbox = document.getElementById('gallery-lightbox') as HTMLDivElement;
+  const lightboxImg = lightbox?.querySelector('.lightbox-img') as HTMLImageElement;
+  const closeBtn = lightbox?.querySelector('.lightbox-close') as HTMLButtonElement;
+  const prevBtn = lightbox?.querySelector('.lightbox-prev') as HTMLButtonElement;
+  const nextBtn = lightbox?.querySelector('.lightbox-next') as HTMLButtonElement;
+
+  let visibleImages: HTMLButtonElement[] = [];
+  let currentIndex = 0;
+
+  function getVisibleImages(): HTMLButtonElement[] {
+    return Array.from(items).filter((item) => item.dataset.hidden !== 'true');
+  }
+
+  function openLightbox(index: number) {
+    visibleImages = getVisibleImages();
+    currentIndex = index;
+    const img = visibleImages[currentIndex]?.querySelector('img');
+    if (img && lightbox && lightboxImg) {
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightbox.setAttribute('aria-hidden', 'false');
+    }
+  }
+
+  function navigate(direction: number) {
+    visibleImages = getVisibleImages();
+    currentIndex = (currentIndex + direction + visibleImages.length) % visibleImages.length;
+    const img = visibleImages[currentIndex]?.querySelector('img');
+    if (img && lightboxImg) {
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+    }
+  }
+
+  function closeLightbox() {
+    lightbox?.setAttribute('aria-hidden', 'true');
+  }
+
+  items.forEach((item) => {
+    item.addEventListener('click', () => {
+      const visible = getVisibleImages();
+      const index = visible.indexOf(item);
+      if (index >= 0) openLightbox(index);
+    });
+  });
+
+  closeBtn?.addEventListener('click', closeLightbox);
+  prevBtn?.addEventListener('click', () => navigate(-1));
+  nextBtn?.addEventListener('click', () => navigate(1));
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (lightbox?.getAttribute('aria-hidden') === 'false') {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') navigate(-1);
+      if (e.key === 'ArrowRight') navigate(1);
+    }
+  });
+</script>
