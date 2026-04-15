@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { env } from 'cloudflare:workers';
 import { Resend } from 'resend';
 
 // In-memory rate limit with timestamps
@@ -39,7 +40,7 @@ function cleanExpiredEntries(ip: string, now: number): number[] {
   return valid;
 }
 
-export const POST: APIRoute = async ({ request, locals }) => {
+export const POST: APIRoute = async ({ request }) => {
   try {
     const formData = await request.formData();
     const name = formData.get('name')?.toString().trim() ?? '';
@@ -118,8 +119,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     rateLimitMap.set(ip, recentRequests);
 
     // Get API key from Cloudflare runtime env
-    const runtime = (locals as Record<string, unknown>).runtime as { env?: { RESEND_API_KEY?: string } } | undefined;
-    const resendApiKey = runtime?.env?.RESEND_API_KEY;
+    const resendApiKey = env.RESEND_API_KEY;
 
     if (!resendApiKey) {
       console.error('Missing RESEND_API_KEY');
