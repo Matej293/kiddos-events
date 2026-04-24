@@ -1,0 +1,119 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Navigation from "../../components/Navigation.astro";
+import Footer from "../../components/Footer.astro";
+import { Image } from "astro:assets";
+import proslaveMain from "../../assets/sections/proslave-main.jpeg";
+import heroProslave from "../../assets/home/hero-proslave.jpeg";
+import en from "../../i18n/en";
+
+const t = en;
+const basePath = "/en";
+---
+
+<Layout
+  title={t.meta.events.title}
+  description={t.meta.events.description}
+  locale={t.locale}
+  language={t.lang}
+  t={t}
+  basePath={basePath}
+>
+  <Navigation t={t} basePath={basePath} />
+
+  <main class="story-page">
+    <section class="section split-section split-hero split-reverse match-text">
+      <div class="container split-grid split-hero-grid">
+        <div class="intro-title-wrap reveal" style="--reveal-delay: 0s;">
+          <p class="intro-title">{t.events.heroTitle}</p>
+        </div>
+        <div class="split-text reveal" style="--reveal-delay: 0.05s;">
+          <h1 class="intro-subtitle">{t.events.heroSubtitle}</h1>
+          {t.events.heroParagraphs.map((text) => (
+            <p set:html={text} />
+          ))}
+        </div>
+        <div
+          class="split-media reveal"
+          style="--reveal-delay: 0.15s; --crop-x: 45%; --crop-y: 35%; --media-max: 520px; --media-ratio: 4 / 3;"
+        >
+          <div class="img-wrap frame frame--soft">
+            <Image
+              src={proslaveMain}
+              alt={t.events.altMain}
+              width={1800}
+              loading="eager"
+              decoding="async"
+              priority
+              sizes="(max-width: 900px) 100vw, 48vw"
+              class="media-image"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section split-section crop-top match-text">
+      <div class="container split-grid with-cta">
+        <div class="split-text reveal" style="--reveal-delay: 0.1s;">
+          {t.events.detailsParagraphs.map((text) => (
+            <p set:html={text} />
+          ))}
+        </div>
+        <div class="split-cta reveal" style="--reveal-delay: 0.16s;">
+          <button type="button" class="btn-primary" data-contact-open>
+            {t.events.cta}
+          </button>
+        </div>
+        <div
+          class="split-media reveal"
+          style="--reveal-delay: 0.2s; --crop-x: 50%; --crop-y: 58%; --media-max: 520px; --media-ratio: 3 / 4;"
+        >
+          <div class="img-wrap frame frame--sharp">
+            <Image
+              src={heroProslave}
+              alt={t.events.altHero}
+              width={1600}
+              loading="lazy"
+              decoding="async"
+              fetchpriority="low"
+              sizes="(max-width: 900px) 100vw, 46vw"
+              class="media-image"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer t={t} basePath={basePath} />
+
+  <script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: t.events.heroTitle,
+      description: t.meta.events.description,
+      provider: {
+        "@type": "LocalBusiness",
+        name: "Kiddos Events",
+        url: "https://kiddos-events.hr/en",
+        telephone: "+385991234567",
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Osijek",
+          addressCountry: "HR",
+        },
+      },
+      areaServed: "HR",
+    })}
+  />
+</Layout>
+
+<style>
+  .split-hero .intro-subtitle {
+    max-width: 16ch;
+  }
+</style>

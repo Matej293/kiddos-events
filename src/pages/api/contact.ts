@@ -16,7 +16,16 @@ const MAX_NAME = 100;
 const MAX_EMAIL = 254;
 const MAX_MESSAGE = 2000;
 
-const ALLOWED_SERVICES = ['soft-play', 'rodjendan', 'vjencanje', 'ostalo'];
+const ALLOWED_SERVICES = ['vjencanje', 'proslave-eventi', 'najam-opreme'];
+const BALL_COLORS = ['bijela', 'plava', 'roza', 'tirkizna', 'zlatna', 'zuta'];
+const EQUIPMENT_OPTIONS = [
+  'mini-set',
+  'maxi-set',
+  'beige-set',
+  'mini-dvorac',
+  'combo-mini-dvorac',
+  'combo-maxi-dvorac',
+];
 
 export const prerender = false;
 
@@ -44,10 +53,52 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     const formData = await request.formData();
     const name = formData.get('name')?.toString().trim() ?? '';
+    const phone = formData.get('phone')?.toString().trim() ?? '';
     const email = formData.get('email')?.toString().trim() ?? '';
     const service = formData.get('service')?.toString().trim() ?? '';
     const message = formData.get('message')?.toString().trim() ?? '';
     const hp = formData.get('website_url')?.toString().trim() ?? '';
+    const turnstileToken = formData.get('cf-turnstile-response')?.toString().trim() ?? '';
+
+    const weddingKids = formData.get('wedding_kids')?.toString().trim() ?? '';
+    const weddingLocation = formData.get('wedding_location')?.toString().trim() ?? '';
+    const weddingDate = formData.get('wedding_date')?.toString().trim() ?? '';
+    const weddingNames = formData.get('wedding_names')?.toString().trim() ?? '';
+
+    const eventKids = formData.get('event_kids')?.toString().trim() ?? '';
+    const eventLocation = formData.get('event_location')?.toString().trim() ?? '';
+    const eventDate = formData.get('event_date')?.toString().trim() ?? '';
+
+    const rentalLocation = formData.get('rental_location')?.toString().trim() ?? '';
+    const rentalDate = formData.get('rental_date')?.toString().trim() ?? '';
+
+    const addonRental = formData.get('addon_rental')?.toString().trim() ?? '';
+    const addonFacepainting = formData.get('addon_facepainting')?.toString().trim() ?? '';
+    const equipment = formData.getAll('equipment').map((item) => item.toString());
+    const ballColor = formData.get('ball_color')?.toString().trim() ?? '';
+
+    // Turnstile verification
+    const turnstileSecret = env.TURNSTILE_SECRET_KEY;
+    if (turnstileSecret) {
+      if (!turnstileToken) {
+        return new Response(
+          JSON.stringify({ error: 'Bot verifikacija nije uspjela.' }),
+          { status: 400, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+      const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `secret=${encodeURIComponent(turnstileSecret)}&response=${encodeURIComponent(turnstileToken)}`,
+      });
+      const verifyData = await verifyRes.json();
+      if (!verifyData.success) {
+        return new Response(
+          JSON.stringify({ error: 'Bot verifikacija nije uspjela.' }),
+          { status: 400, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+    }
 
     // Honeypot — bots fill this hidden field
     if (hp) {
@@ -58,7 +109,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Validate required fields
-    if (!name || !email || !service || !message) {
+    if (!name || !phone || !email || !service) {
       return new Response(
         JSON.stringify({ error: 'Sva polja su obavezna.' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
@@ -80,7 +131,7 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    if (message.length > MAX_MESSAGE) {
+    if (message && message.length > MAX_MESSAGE) {
       return new Response(
         JSON.stringify({ error: 'Poruka je predugačka (maks. 2000 znakova).' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
@@ -101,6 +152,58 @@ export const POST: APIRoute = async ({ request }) => {
         JSON.stringify({ error: 'Nepoznata vrsta usluge.' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
+    }
+
+    const isWedding = service === 'vjencanje';
+    const isEvent = service === 'proslave-eventi';
+    const isRental = service === 'najam-opreme';
+    const wantsRental = isRental || addonRental === 'da';
+
+    if (isWedding) {
+      if (!weddingKids || !weddingLocation || !weddingDate || !weddingNames) {
+        return new Response(
+          JSON.stringify({ error: 'Molimo ispunite sva obavezna polja za vjenčanje.' }),
+          { status: 400, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+    }
+
+    if (isEvent) {
+      if (!eventKids || !eventLocation || !eventDate) {
+        return new Response(
+          JSON.stringify({ error: 'Molimo ispunite sva obavezna polja za proslave i evente.' }),
+          { status: 400, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+    }
+
+    if (isRental) {
+      if (!rentalLocation || !rentalDate) {
+        return new Response(
+          JSON.stringify({ error: 'Molimo ispunite sva obavezna polja za najam opreme.' }),
+          { status: 400, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+    }
+
+    if (wantsRental) {
+      const invalidEquipment = equipment.some((item) => !EQUIPMENT_OPTIONS.includes(item));
+      if (invalidEquipment || equipment.length === 0) {
+        return new Response(
+          JSON.stringify({ error: 'Odaberite barem jednu opciju opreme.' }),
+          { status: 400, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+
+      const onlyMiniDvorac = equipment.length === 1 && equipment[0] === 'mini-dvorac';
+      if (!onlyMiniDvorac) {
+        if (!ballColor || !BALL_COLORS.includes(ballColor)) {
+          return new Response(
+            JSON.stringify({ error: 'Odaberite boju loptica.' }),
+            { status: 400, headers: { 'Content-Type': 'application/json' } }
+          );
+        }
+      }
     }
 
     // Rate limiting per IP using sliding window
@@ -132,9 +235,24 @@ export const POST: APIRoute = async ({ request }) => {
     const resend = new Resend(resendApiKey);
 
     const safeName = sanitizeHtml(name);
+    const safePhone = sanitizeHtml(phone);
     const safeEmail = sanitizeHtml(email);
     const safeService = sanitizeHtml(service);
     const safeMessage = sanitizeHtml(message);
+    const safeWeddingNames = sanitizeHtml(weddingNames);
+    const safeWeddingLocation = sanitizeHtml(weddingLocation);
+    const safeEventLocation = sanitizeHtml(eventLocation);
+    const safeRentalLocation = sanitizeHtml(rentalLocation);
+    const equipmentLabels: Record<string, string> = {
+      'mini-set': 'Mini set',
+      'maxi-set': 'Maxi set',
+      'beige-set': 'Beige set',
+      'mini-dvorac': 'Mini dvorac',
+      'combo-mini-dvorac': 'Kombinacija: mini set + dvorac',
+      'combo-maxi-dvorac': 'Kombinacija: maxi set + dvorac',
+    };
+    const safeEquipment = equipment.map((item) => sanitizeHtml(equipmentLabels[item] ?? item));
+    const safeBallColor = sanitizeHtml(ballColor);
 
     await resend.emails.send({
       from: 'Kiddos Kontakt <noreply@kiddos-events.hr>',
@@ -144,10 +262,22 @@ export const POST: APIRoute = async ({ request }) => {
       html: `
         <h2>Novi upit s web stranice</h2>
         <p><strong>Ime:</strong> ${safeName}</p>
+        <p><strong>Telefon:</strong> ${safePhone}</p>
         <p><strong>E-mail:</strong> ${safeEmail}</p>
         <p><strong>Usluga:</strong> ${safeService}</p>
-        <p><strong>Poruka:</strong></p>
-        <p>${safeMessage.replace(/\n/g, '<br />')}</p>
+        ${isWedding ? `<p><strong>Broj djece:</strong> ${sanitizeHtml(weddingKids)}</p>` : ''}
+        ${isWedding ? `<p><strong>Lokacija:</strong> ${safeWeddingLocation}</p>` : ''}
+        ${isWedding ? `<p><strong>Datum:</strong> ${sanitizeHtml(weddingDate)}</p>` : ''}
+        ${isWedding ? `<p><strong>Imena mladenaca:</strong> ${safeWeddingNames}</p>` : ''}
+        ${isWedding ? `<p><strong>Facepainting:</strong> ${addonFacepainting === 'da' ? 'Da' : 'Ne'}</p>` : ''}
+        ${isEvent ? `<p><strong>Broj djece:</strong> ${sanitizeHtml(eventKids)}</p>` : ''}
+        ${isEvent ? `<p><strong>Lokacija:</strong> ${safeEventLocation}</p>` : ''}
+        ${isEvent ? `<p><strong>Datum:</strong> ${sanitizeHtml(eventDate)}</p>` : ''}
+        ${isRental ? `<p><strong>Lokacija:</strong> ${safeRentalLocation}</p>` : ''}
+        ${isRental ? `<p><strong>Datum:</strong> ${sanitizeHtml(rentalDate)}</p>` : ''}
+        ${wantsRental ? `<p><strong>Najam opreme:</strong> ${safeEquipment.join(', ')}</p>` : ''}
+        ${wantsRental && safeBallColor ? `<p><strong>Boja loptica:</strong> ${safeBallColor}</p>` : ''}
+        ${safeMessage ? `<p><strong>Komentar:</strong></p><p>${safeMessage.replace(/\n/g, '<br />')}</p>` : ''}
       `,
     });
 

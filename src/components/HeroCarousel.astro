@@ -1,0 +1,504 @@
+---
+import { Image } from "astro:assets";
+import heroVjencanja from "../assets/home/hero-vjencanja.jpeg";
+import heroProslave from "../assets/home/hero-proslave.jpeg";
+import heroOprema from "../assets/home/hero-oprema.jpeg";
+
+const { t, basePath = "" } = Astro.props;
+const buildPath = (path: string) => {
+  if (!basePath) return path;
+  return path === "/" ? basePath : `${basePath}${path}`;
+};
+const slides = [
+  {
+    src: heroVjencanja,
+    alt: t.heroCarousel.slides[0].alt,
+    label: t.heroCarousel.slides[0].label,
+    href: buildPath("/vjencanja"),
+  },
+  {
+    src: heroProslave,
+    alt: t.heroCarousel.slides[1].alt,
+    label: t.heroCarousel.slides[1].label,
+    href: buildPath("/proslave-i-eventi"),
+  },
+  {
+    src: heroOprema,
+    alt: t.heroCarousel.slides[2].alt,
+    label: t.heroCarousel.slides[2].label,
+    href: buildPath("/najam-opreme"),
+  },
+];
+
+---
+
+<section class="hero" aria-label={t.heroCarousel.ariaLabel}>
+  <div class="hero-media">
+    <div class="hero-track" id="hero-track">
+      {slides.map((slide, index) => (
+        <div
+          class:list={["hero-slide", { "is-active": index === 0 }]}
+          data-slide={index}
+          aria-hidden={index === 0 ? "false" : "true"}
+        >
+          <div class="img-wrap">
+            <Image
+              src={slide.src}
+              alt={slide.alt}
+              width={2600}
+              sizes="100vw"
+              loading={index === 0 ? "eager" : "lazy"}
+              decoding="async"
+              fetchpriority={index === 0 ? "high" : "low"}
+              class="hero-image"
+            />
+          </div>
+          <a href={slide.href} class="flow-button hero-label">
+            {slide.label}
+          </a>
+        </div>
+      ))}
+    </div>
+
+    <span class="hero-timer" aria-hidden="true">
+      <svg viewBox="0 0 36 36" class="hero-timer-svg" role="presentation">
+        <circle class="hero-timer-bg" cx="18" cy="18" r="15"></circle>
+        <circle class="hero-timer-ring" id="hero-timer-ring" cx="18" cy="18" r="15"></circle>
+      </svg>
+    </span>
+
+    <button
+      class="flow-button hero-arrow hero-arrow--prev"
+      type="button"
+      id="hero-prev"
+      aria-label={t.heroCarousel.prevLabel}
+    >
+      <span class="hero-arrow-icon" aria-hidden="true">&#8592;</span>
+    </button>
+    <button
+      class="flow-button hero-arrow hero-arrow--next"
+      type="button"
+      id="hero-next"
+      aria-label={t.heroCarousel.nextLabel}
+    >
+      <span class="hero-arrow-icon" aria-hidden="true">&#8594;</span>
+    </button>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-top: var(--nav-height-desktop);
+  }
+
+  .hero-media {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+  }
+
+  .hero-track {
+    position: relative;
+    width: 100%;
+    height: calc(100svh - var(--nav-height-desktop));
+    min-height: clamp(420px, 70vh, 560px);
+    overflow: hidden;
+    background: var(--surface);
+    touch-action: pan-y;
+  }
+
+  .hero-slide {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .hero-slide :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    background-color: var(--surface);
+  }
+
+  .hero-slide[data-slide="0"] :global(img) {
+    object-position: center 70%;
+  }
+
+  .hero-slide[data-slide="1"] :global(img) {
+    object-position: center 50%;
+  }
+
+  .hero-slide[data-slide="2"] :global(img) {
+    object-position: center 75%;
+  }
+
+  .hero-slide.is-active {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 1;
+  }
+
+  .flow-button {
+    --flow-scale: 1;
+    --flow-sweep-bg: #2c2c2c;
+    position: relative;
+    z-index: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    overflow: hidden;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    box-shadow: inset 0 0 0 1px rgba(44, 44, 44, 0.22),
+      0 6px 16px rgba(44, 44, 44, 0.12);
+    color: var(--dark);
+    font-weight: 600;
+    padding: 12px 18px;
+    transform: translate3d(
+        var(--flow-translate-x, 0),
+        var(--flow-translate-y, 0),
+        0
+      )
+      scale(var(--flow-scale));
+    transform-origin: center;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+      color 0.5s ease, box-shadow 0.4s ease, text-shadow 0.4s ease;
+    text-shadow: none;
+    backface-visibility: hidden;
+    isolation: isolate;
+    will-change: transform;
+  }
+
+  .flow-button::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    border-radius: inherit;
+    background: var(--surface);
+  }
+
+  .flow-button::before {
+    content: "";
+    position: absolute;
+    width: 320%;
+    height: 320%;
+    right: -160%;
+    bottom: -160%;
+    z-index: -1;
+    border-radius: 50%;
+    background: var(--flow-sweep-bg);
+    opacity: 0;
+    transform: scale(0.01);
+    transform-origin: 100% 100%;
+    transition: opacity 0.25s ease;
+  }
+
+  .flow-button:hover,
+  .flow-button:focus-visible {
+    --flow-scale: 1.025;
+    box-shadow: inset 0 0 0 1px transparent,
+      0 12px 28px rgba(28, 28, 28, 0.22);
+    color: var(--surface);
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    opacity: 1;
+  }
+
+  .flow-button:active {
+    --flow-scale: 0.99;
+  }
+
+  .flow-button:hover::before,
+  .flow-button:focus-visible::before {
+    opacity: 1;
+    animation: flow-settle 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .flow-button:not(:hover):not(:focus-visible)::before {
+    animation: none;
+  }
+
+  @keyframes flow-settle {
+    0% {
+      transform: scale(0.01);
+    }
+    70% {
+      transform: scale(1.12);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+
+  .hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .hero-slide .img-wrap,
+  .hero-slide .img-wrap::after {
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-label {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    --flow-translate-x: -50%;
+    --flow-translate-y: -50%;
+    z-index: 2;
+    width: fit-content;
+    max-width: min(90%, 36ch);
+    text-align: center;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.35;
+    text-decoration: none;
+  }
+
+  .hero-label:hover,
+  .hero-label:focus-visible {
+    opacity: 1;
+  }
+
+  .hero-timer {
+    position: absolute;
+    left: 22px;
+    bottom: 20px;
+    z-index: 2;
+    width: 26px;
+    height: 26px;
+  }
+
+  .hero-timer-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+
+  .hero-timer-bg,
+  .hero-timer-ring {
+    fill: none;
+    stroke-width: 1.6;
+  }
+
+  .hero-timer-bg {
+    stroke: rgba(245, 242, 237, 0.36);
+  }
+
+  .hero-timer-ring {
+    stroke: rgba(244, 244, 244, 0.94);
+    stroke-dasharray: 94.248;
+    stroke-dashoffset: 94.248;
+    transition: stroke-dashoffset 0.08s linear;
+  }
+
+  .hero-arrow {
+    position: absolute;
+    bottom: 20px;
+    z-index: 2;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .hero-arrow:hover,
+  .hero-arrow:focus-visible {
+    opacity: 1;
+  }
+
+  .hero-arrow:active {
+    opacity: 1;
+  }
+
+  .hero-arrow--prev {
+    right: 66px;
+  }
+
+  .hero-arrow--next {
+    right: 20px;
+  }
+
+  .hero-arrow-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      padding-top: 0;
+    }
+
+    .hero-track {
+      height: 100svh;
+      min-height: clamp(360px, 70vh, 460px);
+    }
+
+    .hero-label {
+      padding: 10px 12px;
+      font-size: 0.72rem;
+      letter-spacing: 0.07em;
+    }
+
+    .hero-timer {
+      left: 14px;
+      bottom: 14px;
+      width: 22px;
+      height: 22px;
+    }
+
+    .hero-arrow {
+      width: 34px;
+      height: 34px;
+      bottom: 14px;
+    }
+
+    .hero-arrow--prev {
+      right: 56px;
+    }
+
+    .hero-arrow--next {
+      right: 14px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-slide,
+    .hero-arrow,
+    .hero-arrow::before {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const slides = Array.from(document.querySelectorAll<HTMLElement>(".hero-slide"));
+  const prevBtn = document.getElementById("hero-prev") as HTMLButtonElement | null;
+  const nextBtn = document.getElementById("hero-next") as HTMLButtonElement | null;
+  const timerRing = document.getElementById("hero-timer-ring") as SVGCircleElement | null;
+  const heroTrack = document.getElementById("hero-track") as HTMLElement | null;
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (slides.length > 1) {
+    let current = 0;
+    let timer: ReturnType<typeof setInterval> | undefined;
+    let timerVisual: ReturnType<typeof setInterval> | undefined;
+    const cycleMs = 5200;
+    let cycleStart = Date.now();
+
+    const setActive = (index: number) => {
+      slides.forEach((slide, i) => {
+        const isActive = i === index;
+        slide.classList.toggle("is-active", isActive);
+        slide.setAttribute("aria-hidden", isActive ? "false" : "true");
+      });
+      current = index;
+    };
+
+    const next = () => setActive((current + 1) % slides.length);
+    const prev = () => setActive((current - 1 + slides.length) % slides.length);
+
+    const updateTimerVisual = () => {
+      if (!timerRing) return;
+      const elapsed = (Date.now() - cycleStart) % cycleMs;
+      const progress = elapsed / cycleMs;
+      const offset = 94.248 - 94.248 * progress;
+      timerRing.style.strokeDashoffset = offset.toString();
+    };
+
+    const restart = () => {
+      if (timer) clearInterval(timer);
+      if (timerVisual) clearInterval(timerVisual);
+      cycleStart = Date.now();
+      updateTimerVisual();
+      if (!prefersReduced) {
+        timer = setInterval(() => {
+          next();
+          cycleStart = Date.now();
+        }, cycleMs);
+      }
+      if (!prefersReduced) {
+        timerVisual = setInterval(updateTimerVisual, 80);
+      }
+    };
+
+    prevBtn?.addEventListener("click", () => {
+      prev();
+      restart();
+    });
+
+    nextBtn?.addEventListener("click", () => {
+      next();
+      restart();
+    });
+
+    if (heroTrack) {
+      let startX = 0;
+      let startY = 0;
+      let isTouching = false;
+
+      heroTrack.addEventListener(
+        "touchstart",
+        (event) => {
+          if (event.touches.length > 1) return;
+          const touch = event.touches[0];
+          startX = touch.clientX;
+          startY = touch.clientY;
+          isTouching = true;
+        },
+        { passive: true }
+      );
+
+      heroTrack.addEventListener(
+        "touchmove",
+        (event) => {
+          if (!isTouching || event.touches.length > 1) return;
+          const touch = event.touches[0];
+          const deltaX = touch.clientX - startX;
+          const deltaY = touch.clientY - startY;
+          if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 12) {
+            event.preventDefault();
+          }
+        },
+        { passive: false }
+      );
+
+      heroTrack.addEventListener(
+        "touchend",
+        (event) => {
+          if (!isTouching) return;
+          isTouching = false;
+          const touch = event.changedTouches[0];
+          const deltaX = touch.clientX - startX;
+          const deltaY = touch.clientY - startY;
+          if (Math.abs(deltaX) > 48 && Math.abs(deltaX) > Math.abs(deltaY)) {
+            if (deltaX < 0) {
+              next();
+            } else {
+              prev();
+            }
+            restart();
+          }
+        },
+        { passive: true }
+      );
+    }
+
+    updateTimerVisual();
+    restart();
+  }
+</script>

@@ -1,11 +1,11 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Navigation from "../components/Navigation.astro";
-import Footer from "../components/Footer.astro";
-import hr from "../i18n/hr";
+import Layout from "../../layouts/Layout.astro";
+import Navigation from "../../components/Navigation.astro";
+import Footer from "../../components/Footer.astro";
+import en from "../../i18n/en";
 
-const t = hr;
-const basePath = "";
+const t = en;
+const basePath = "/en";
 ---
 
 <Layout
@@ -127,13 +127,6 @@ const basePath = "";
 
   .legal-body li {
     margin-bottom: 6px;
-  }
-
-  .placeholder-notice {
-    color: rgba(44, 44, 44, 0.6);
-    font-size: 1.04rem;
-    padding: 32px 0;
-    max-width: none;
   }
 
   @media (max-width: 768px) {

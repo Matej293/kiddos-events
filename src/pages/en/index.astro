@@ -1,13 +1,13 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Navigation from "../components/Navigation.astro";
-import HeroCarousel from "../components/HeroCarousel.astro";
-import Footer from "../components/Footer.astro";
-import hr from "../i18n/hr";
+import Layout from "../../layouts/Layout.astro";
+import Navigation from "../../components/Navigation.astro";
+import HeroCarousel from "../../components/HeroCarousel.astro";
+import Footer from "../../components/Footer.astro";
+import en from "../../i18n/en";
 
-const t = hr;
-const basePath = "";
-const buildPath = (path: string) => (basePath ? (path === "/" ? basePath : `${basePath}${path}`) : path);
+const t = en;
+const basePath = "/en";
+const buildPath = (path: string) => (path === "/" ? basePath : `${basePath}${path}`);
 ---
 
 <Layout
@@ -29,7 +29,7 @@ const buildPath = (path: string) => (basePath ? (path === "/" ? basePath : `${ba
           <div class="intro-inner">
             <p class="intro-kicker">{t.index.intro.kicker}</p>
             <h1>{t.index.intro.title}</h1>
-            <p set:html={t.index.intro.body} />
+            <p>{t.index.intro.body}</p>
           </div>
           <div class="intro-tags" aria-label={t.index.intro.tagsLabel}>
             {t.index.intro.tags.map((tag) => (
@@ -39,10 +39,6 @@ const buildPath = (path: string) => (basePath ? (path === "/" ? basePath : `${ba
         </div>
       </div>
     </section>
-
-    <div class="container section-divider" aria-hidden="true">
-      <span class="divider-line"></span>
-    </div>
 
     <section class="section services">
       <div class="container services-inner">
@@ -85,6 +81,10 @@ const buildPath = (path: string) => (basePath ? (path === "/" ? basePath : `${ba
 
     <div class="container section-divider" aria-hidden="true">
       <span class="divider-line"></span>
+      <span class="divider-block"></span>
+      <span class="divider-block"></span>
+      <span class="divider-block"></span>
+      <span class="divider-line"></span>
     </div>
 
     <section class="section reviews-section">
@@ -125,14 +125,6 @@ const buildPath = (path: string) => (basePath ? (path === "/" ? basePath : `${ba
         </div>
       </div>
     </section>
-
-    <div class="container section-divider" aria-hidden="true">
-      <span class="divider-line"></span>
-      <span class="divider-block"></span>
-      <span class="divider-block"></span>
-      <span class="divider-block"></span>
-      <span class="divider-line"></span>
-    </div>
 
     <section class="section social-section">
       <div class="container social-inner">
@@ -253,7 +245,7 @@ const buildPath = (path: string) => (basePath ? (path === "/" ? basePath : `${ba
     padding: 6px 12px;
     border-radius: 999px;
     border: 1px solid rgba(44, 44, 44, 0.18);
-    font-size: 0.78rem;
+    font-size: 0.84rem;
     font-weight: 600;
     letter-spacing: 0.04em;
     color: var(--dark);
@@ -304,7 +296,6 @@ const buildPath = (path: string) => (basePath ? (path === "/" ? basePath : `${ba
     outline: 2px solid var(--dark);
     outline-offset: 4px;
   }
-
 
   .service-card h3 {
     font-size: 1.2rem;
@@ -396,7 +387,7 @@ const buildPath = (path: string) => (basePath ? (path === "/" ? basePath : `${ba
   .review-text {
     color: var(--charcoal-gray);
     display: -webkit-box;
-    -webkit-line-clamp: 5;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
     line-height: 1.6;

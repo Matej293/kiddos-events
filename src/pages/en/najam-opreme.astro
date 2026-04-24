@@ -1,0 +1,555 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Navigation from "../../components/Navigation.astro";
+import Footer from "../../components/Footer.astro";
+import { Image } from "astro:assets";
+import najamMain from "../../assets/sections/najam-main.jpeg";
+import heroOprema from "../../assets/home/hero-oprema.jpeg";
+import miniSetCjenik from "../../assets/equipment/mini-set-cjenik.jpeg";
+import maxiSetCjenik from "../../assets/equipment/maxi-set-cjenik.jpeg";
+import miniDvoracCjenik from "../../assets/equipment/mini-dvorac-cjenik.jpeg";
+import beigeSetCjenik from "../../assets/equipment/beige-set-cjenik.jpeg";
+import en from "../../i18n/en";
+
+const t = en;
+const basePath = "/en";
+
+const offers = [
+  {
+    title: t.rental.offers.mini.title,
+    price: t.rental.offers.mini.price,
+    image: miniSetCjenik,
+    alt: t.rental.offers.mini.alt,
+    details: t.rental.offers.mini.details,
+  },
+  {
+    title: t.rental.offers.maxi.title,
+    price: t.rental.offers.maxi.price,
+    image: maxiSetCjenik,
+    alt: t.rental.offers.maxi.alt,
+    details: t.rental.offers.maxi.details,
+  },
+  {
+    title: t.rental.offers.castle.title,
+    price: t.rental.offers.castle.price,
+    image: miniDvoracCjenik,
+    alt: t.rental.offers.castle.alt,
+    details: t.rental.offers.castle.details,
+  },
+  {
+    title: t.rental.offers.beige.title,
+    price: t.rental.offers.beige.price,
+    image: beigeSetCjenik,
+    alt: t.rental.offers.beige.alt,
+    details: t.rental.offers.beige.details,
+  },
+];
+
+const combinations = [
+  {
+    label: t.rental.combinations.items.mini.title,
+    price: t.rental.combinations.items.mini.price,
+    originalPrice: t.rental.combinations.items.mini.originalPrice,
+    savings: t.rental.combinations.items.mini.savings,
+    images: [miniSetCjenik, miniDvoracCjenik],
+    alts: [t.rental.combinations.items.mini.altSet, t.rental.combinations.items.mini.altCastle],
+  },
+  {
+    label: t.rental.combinations.items.maxi.title,
+    price: t.rental.combinations.items.maxi.price,
+    originalPrice: t.rental.combinations.items.maxi.originalPrice,
+    savings: t.rental.combinations.items.maxi.savings,
+    images: [maxiSetCjenik, miniDvoracCjenik],
+    alts: [t.rental.combinations.items.maxi.altSet, t.rental.combinations.items.maxi.altCastle],
+  },
+];
+---
+
+<Layout
+  title={t.meta.rental.title}
+  description={t.meta.rental.description}
+  locale={t.locale}
+  language={t.lang}
+  t={t}
+  basePath={basePath}
+>
+  <Navigation t={t} basePath={basePath} />
+
+  <main class="story-page">
+    <section class="section split-section split-hero match-text">
+      <div class="container split-grid split-hero-grid">
+        <div class="intro-title-wrap reveal" style="--reveal-delay: 0s;">
+          <p class="intro-title">{t.rental.heroTitle}</p>
+        </div>
+        <div class="split-text reveal" style="--reveal-delay: 0.05s;">
+          <h1 class="intro-subtitle">{t.rental.heroSubtitle}</h1>
+          {t.rental.heroParagraphs.map((text) => (
+            <p set:html={text} />
+          ))}
+        </div>
+        <div class="split-media reveal" style="--reveal-delay: 0.15s;">
+          <div class="img-wrap frame frame--soft">
+            <Image
+              src={najamMain}
+              alt={t.rental.altMain ?? "Soft play rental"}
+              width={1800}
+              loading="eager"
+              decoding="async"
+              priority
+              sizes="(max-width: 900px) 100vw, 48vw"
+              class="media-image"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section split-section split-reverse short-media crop-top match-text">
+      <div class="container split-grid with-cta">
+          <div class="split-text reveal" style="--reveal-delay: 0.1s;">
+            {t.rental.detailsParagraphs.map((text) => (
+              <p set:html={text} />
+            ))}
+          </div>
+        <div class="split-cta reveal" style="--reveal-delay: 0.16s;">
+          <button type="button" class="btn-primary" data-contact-open>
+            {t.rental.primaryCta}
+          </button>
+        </div>
+        <div
+          class="split-media reveal"
+          style="--reveal-delay: 0.2s; --crop-x: 50%; --crop-y: 108%; --media-max: 520px; --media-ratio: 4 / 3;"
+        >
+          <div class="img-wrap frame frame--sharp">
+            <Image
+              src={heroOprema}
+              alt={t.rental.altHero ?? "Soft play corner"}
+              width={1600}
+              loading="lazy"
+              decoding="async"
+              fetchpriority="low"
+              sizes="(max-width: 900px) 100vw, 46vw"
+              class="media-image"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section equipment-collection">
+      <div class="container">
+        <div class="equipment-grid">
+          {offers.map((offer, index) => (
+            <article class="equipment-card reveal" style={`--reveal-delay: ${0.08 + index * 0.05}s;`}>
+              <div class="equipment-media">
+                <div class="img-wrap frame frame--sharp">
+                  <Image
+                    src={offer.image}
+                    alt={offer.alt}
+                    width={1100}
+                    loading="lazy"
+                    decoding="async"
+                    fetchpriority="low"
+                    sizes="(max-width: 900px) 100vw, 360px"
+                    class="media-image"
+                  />
+                </div>
+              </div>
+              <div class="equipment-content">
+                <div class="equipment-head">
+                  <h2>{offer.title}</h2>
+                  <p class="offer-price">{offer.price}</p>
+                </div>
+                <ul>
+                  {offer.details.map((item) => (
+                    <li>
+                      {item.startsWith(t.rental.gratisPrefix) ? (
+                        <>
+                          <span class="gratis-badge">{t.rental.gratisLabel}</span>
+                          {item.replace(t.rental.gratisPrefix, "").trim()}
+                        </>
+                      ) : (
+                        item
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section combinations-section">
+      <div class="container">
+        <div class="combinations-header reveal" style="--reveal-delay: 0.1s;">
+          <h2>{t.rental.combinations.title}</h2>
+        </div>
+        <div class="combinations-cards">
+          {combinations.map((combo, index) => (
+            <article class="combo-card reveal" style={`--reveal-delay: ${0.16 + index * 0.06}s;`}>
+              <div class="combo-images">
+                <div class="img-wrap frame frame--sharp">
+                  <Image
+                    src={combo.images[0]}
+                    alt={combo.alts[0]}
+                    width={520}
+                    loading="lazy"
+                    decoding="async"
+                    fetchpriority="low"
+                    sizes="(max-width: 900px) 50vw, 260px"
+                    class="media-image"
+                  />
+                </div>
+                <span class="combo-plus" aria-hidden="true">+</span>
+                <div class="img-wrap frame frame--sharp">
+                  <Image
+                    src={combo.images[1]}
+                    alt={combo.alts[1]}
+                    width={520}
+                    loading="lazy"
+                    decoding="async"
+                    fetchpriority="low"
+                    sizes="(max-width: 900px) 50vw, 260px"
+                    class="media-image"
+                  />
+                </div>
+              </div>
+              <div class="combo-pricing">
+                <span class="combo-price">{combo.price}</span>
+                <span class="combo-savings">{t.rental.combinations.savingsLabel} {combo.savings}</span>
+                <div class="combo-original-row">
+                  <span class="combo-label">{combo.label}</span>
+                  <span class="combo-original">{combo.originalPrice}</span>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section combinations-cta-section">
+      <div class="container">
+        <div class="combinations-cta reveal" style="--reveal-delay: 0.2s;">
+          <button type="button" class="btn-primary" data-contact-open>
+            {t.rental.combinations.cta}
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer t={t} basePath={basePath} />
+
+  <script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: t.rental.heroTitle,
+      description: t.meta.rental.description,
+      provider: {
+        "@type": "LocalBusiness",
+        name: "Kiddos Events",
+        url: "https://kiddos-events.hr/en",
+        telephone: "+385991234567",
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Osijek",
+          addressCountry: "HR",
+        },
+      },
+      areaServed: "HR",
+    })}
+  />
+</Layout>
+
+<style>
+  .split-hero .intro-title {
+    max-width: 42ch;
+  }
+
+  .split-hero .intro-subtitle {
+    max-width: 18ch;
+  }
+
+  .offer-price {
+    font-size: 1.08rem;
+    font-weight: 600;
+    color: var(--dark);
+  }
+
+  .equipment-collection {
+    padding-top: clamp(28px, 4vw, 52px);
+  }
+
+  .equipment-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(20px, 3vw, 32px);
+  }
+
+  .equipment-card {
+    background: linear-gradient(140deg, rgba(255, 255, 255, 0.95), rgba(242, 239, 234, 0.9));
+    border: 1px solid rgba(44, 44, 44, 0.1);
+    border-radius: 16px;
+    padding: 22px;
+    display: grid;
+    grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+    gap: 22px;
+    align-items: start;
+    box-shadow: 0 22px 50px rgba(44, 44, 44, 0.12);
+  }
+
+  .equipment-media .img-wrap {
+    aspect-ratio: 5 / 6;
+    max-height: 280px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(245, 245, 245, 0.7);
+    box-shadow: none;
+  }
+
+  .equipment-collection .frame {
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .equipment-collection .frame::before {
+    content: none;
+  }
+
+  .equipment-card p,
+  .equipment-card li {
+    text-align: left;
+  }
+
+  .equipment-content {
+    display: grid;
+    gap: 14px;
+  }
+
+  .equipment-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .equipment-card ul {
+    list-style: none;
+    display: grid;
+    gap: 8px;
+  }
+
+  .equipment-card li {
+    position: relative;
+    padding-left: 16px;
+  }
+
+  .equipment-card li::before {
+    content: "";
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--dark);
+    position: absolute;
+    left: 0;
+    top: 12px;
+  }
+
+  .gratis-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(44, 44, 44, 0.08);
+    color: var(--dark);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.7rem;
+    margin-right: 8px;
+  }
+
+  .short-media .img-wrap {
+    min-height: 280px;
+  }
+
+  .combinations-section {
+    padding-top: clamp(48px, 5vw, 64px);
+    padding-bottom: clamp(36px, 4vw, 56px);
+  }
+
+  .combinations-header {
+    margin-bottom: clamp(28px, 3.5vw, 40px);
+  }
+
+  .combinations-header h2 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    font-feature-settings: "case" 1;
+  }
+
+  .combinations-cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(20px, 3vw, 32px);
+  }
+
+  .combo-card {
+    border: 1px solid rgba(44, 44, 44, 0.12);
+    border-radius: 16px;
+    padding: clamp(18px, 2.5vw, 24px);
+    background: linear-gradient(140deg, rgba(255, 255, 255, 0.95), rgba(242, 239, 234, 0.9));
+    color: var(--dark);
+    letter-spacing: 0.02em;
+    box-shadow: 0 22px 50px rgba(44, 44, 44, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(16px, 2vw, 22px);
+    overflow: hidden;
+  }
+
+  .combo-images {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+  }
+
+  .combo-images .img-wrap {
+    aspect-ratio: 3 / 4;
+    width: calc(50% - 20px);
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .combo-plus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(44, 44, 44, 0.1);
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--charcoal-gray);
+    flex-shrink: 0;
+    margin: 0 -4px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .combo-pricing {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 clamp(4px, 1vw, 8px);
+  }
+
+  .combo-price {
+    font-weight: 700;
+    font-size: 1.35rem;
+    line-height: 1.1;
+  }
+
+  .combo-savings {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: rgba(182, 218, 144, 0.25);
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--dark);
+    width: fit-content;
+  }
+
+  .combo-original-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .combo-label {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 1rem;
+    color: var(--dark);
+  }
+
+  .combo-original {
+    font-size: 1rem;
+    text-decoration: line-through;
+    text-decoration-color: rgba(44, 44, 44, 0.35);
+    opacity: 0.4;
+    font-weight: 500;
+  }
+
+  .combinations-section .frame {
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .combinations-section .frame::before {
+    content: none;
+  }
+
+  .combinations-cta-section {
+    padding-top: clamp(12px, 2vw, 18px);
+  }
+
+  .combinations-cta {
+    display: flex;
+    justify-content: center;
+  }
+
+  .combinations-cta .btn-secondary {
+    /* use same style as btn-primary contact buttons */
+  }
+
+  @media (max-width: 900px) {
+    .equipment-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .equipment-card {
+      grid-template-columns: 1fr;
+    }
+
+    .combinations-cards {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .equipment-media .img-wrap {
+      aspect-ratio: 4 / 3;
+      max-height: none;
+    }
+
+    .combo-images .img-wrap {
+      width: calc(50% - 16px);
+    }
+
+    .combo-plus {
+      width: 32px;
+      height: 32px;
+      font-size: 1.1rem;
+    }
+  }
+</style>

@@ -26,17 +26,14 @@ pnpm-debug.log*
 .idea/
 .vscode/
 
-# dev screenshots
-temporary screenshots/
-
 # cloudflare workers config (not needed for Pages git integration)
 wrangler.jsonc
-
-# dev tools
-screenshot.mjs
 
 # brand reference assets (not used in source)
 brand_assets/
 
-# claude project instructions
+# project settings
+.claude/
+.contextignore
 CLAUDE.md
+AGENTS.md

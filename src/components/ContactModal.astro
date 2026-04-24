@@ -1,34 +1,37 @@
 ---
-
+const { t, basePath = "" } = Astro.props;
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || "";
+const buildPath = (path: string) => {
+  if (!basePath) return path;
+  return path === "/" ? basePath : `${basePath}${path}`;
+};
 ---
 
 <input type="checkbox" id="contact-toggle" class="contact-toggle-input" aria-hidden="true" />
 
-<div class="contact-overlay" role="dialog" aria-label="Kontakt obrazac" aria-modal="true">
-  <label for="contact-toggle" class="contact-backdrop" aria-label="Zatvori"></label>
+<div class="contact-overlay" role="dialog" aria-label={t.contact.ariaLabel} aria-modal="true">
+  <button type="button" class="contact-backdrop" aria-label={t.contact.closeLabel}></button>
 
   <div class="contact-modal">
     <div class="contact-modal-header">
-      <h3>Javite nam se</h3>
-      <label for="contact-toggle" class="contact-close" aria-label="Zatvori obrazac">
+      <h3>{t.contact.header}</h3>
+      <button type="button" class="contact-close" aria-label={t.contact.closeFormLabel}>
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           <path d="M15 5L5 15M5 5l10 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
         </svg>
-      </label>
+      </button>
     </div>
 
-    <p class="contact-intro">
-      Ispunite obrazac i javit ćemo vam se u najkraćem roku.
-    </p>
+    <p class="contact-intro">{t.contact.intro}</p>
 
     <form id="contact-form" action="/api/contact" method="POST" class="contact-form">
       <div class="hp-field" aria-hidden="true">
-        <label for="website_url">Website</label>
+        <label for="website_url">{t.contact.form.hpLabel}</label>
         <input type="text" id="website_url" name="website_url" tabindex="-1" autocomplete="off" />
       </div>
 
       <div class="form-group">
-        <label for="contact-name" class="form-label">Ime i prezime</label>
+        <label for="contact-name" class="form-label">{t.contact.form.nameLabel}</label>
         <input
           type="text"
           id="contact-name"
@@ -36,13 +39,27 @@
           required
           maxlength="100"
           autocomplete="name"
-          placeholder="Ana Horvat"
+          placeholder={t.contact.form.namePlaceholder}
           class="form-input"
         />
       </div>
 
       <div class="form-group">
-        <label for="contact-email" class="form-label">E-mail</label>
+        <label for="contact-phone" class="form-label">{t.contact.form.phoneLabel}</label>
+        <input
+          type="tel"
+          id="contact-phone"
+          name="phone"
+          required
+          maxlength="20"
+          autocomplete="tel"
+          placeholder={t.contact.form.phonePlaceholder}
+          class="form-input"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="contact-email" class="form-label">{t.contact.form.emailLabel}</label>
         <input
           type="email"
           id="contact-email"
@@ -50,57 +67,259 @@
           required
           maxlength="254"
           autocomplete="email"
-          placeholder="ana@primjer.hr"
+          placeholder={t.contact.form.emailPlaceholder}
           class="form-input"
         />
       </div>
 
-      <div class="form-group">
-        <label for="contact-service" class="form-label">Vrsta usluge</label>
-        <select id="contact-service" name="service" required class="form-input form-select">
-          <option value="" disabled selected>Odaberite uslugu</option>
-          <option value="soft-play">Soft play igraonica</option>
-          <option value="rodjendan">Rođendan</option>
-          <option value="vjencanje">Vjenčanje</option>
-          <option value="ostalo">Ostalo</option>
-        </select>
+      <fieldset class="form-group form-group--service">
+        <legend class="form-label">{t.contact.form.serviceLegend}</legend>
+        <div class="service-options" role="radiogroup" aria-label={t.contact.form.serviceAria}>
+          <label class="service-pill">
+            <input type="radio" name="service" value="vjencanje" required />
+            <span>{t.contact.form.services.weddings}</span>
+          </label>
+          <label class="service-pill">
+            <input type="radio" name="service" value="proslave-eventi" required />
+            <span>{t.contact.form.services.events}</span>
+          </label>
+          <label class="service-pill">
+            <input type="radio" name="service" value="najam-opreme" required />
+            <span>{t.contact.form.services.rental}</span>
+          </label>
+        </div>
+        <p class="service-help">{t.contact.form.serviceHelp}</p>
+      </fieldset>
+
+      <div class="service-section" data-service="vjencanje" hidden>
+        <div class="form-group">
+          <label for="wedding-kids" class="form-label">{t.contact.form.wedding.kidsLabel}</label>
+          <input
+            type="number"
+            id="wedding-kids"
+            name="wedding_kids"
+            min="1"
+            step="1"
+            class="form-input"
+            placeholder={t.contact.form.wedding.kidsPlaceholder}
+          />
+        </div>
+        <div class="form-group">
+          <label for="wedding-location" class="form-label">{t.contact.form.wedding.locationLabel}</label>
+          <input
+            type="text"
+            id="wedding-location"
+            name="wedding_location"
+            class="form-input"
+            placeholder={t.contact.form.wedding.locationPlaceholder}
+          />
+        </div>
+        <div class="form-group">
+          <label for="wedding-date" class="form-label">{t.contact.form.wedding.dateLabel}</label>
+          <input type="date" id="wedding-date" name="wedding_date" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label for="wedding-names" class="form-label">{t.contact.form.wedding.namesLabel}</label>
+          <input
+            type="text"
+            id="wedding-names"
+            name="wedding_names"
+            class="form-input"
+            placeholder={t.contact.form.wedding.namesPlaceholder}
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label">{t.contact.form.wedding.addonsLabel}</label>
+          <div class="checkbox-grid">
+            <label class="checkbox-pill">
+              <input type="checkbox" name="addon_facepainting" value="da" />
+              <span>{t.contact.form.wedding.addonFacepainting}</span>
+            </label>
+            <label class="checkbox-pill">
+              <input type="checkbox" name="addon_rental" value="da" />
+              <span>{t.contact.form.wedding.addonRental}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="service-section" data-service="proslave-eventi" hidden>
+        <div class="form-group">
+          <label for="event-kids" class="form-label">{t.contact.form.events.kidsLabel}</label>
+          <input
+            type="number"
+            id="event-kids"
+            name="event_kids"
+            min="1"
+            step="1"
+            class="form-input"
+            placeholder={t.contact.form.events.kidsPlaceholder}
+          />
+        </div>
+        <div class="form-group">
+          <label for="event-location" class="form-label">{t.contact.form.events.locationLabel}</label>
+          <input
+            type="text"
+            id="event-location"
+            name="event_location"
+            class="form-input"
+            placeholder={t.contact.form.events.locationPlaceholder}
+          />
+        </div>
+        <div class="form-group">
+          <label for="event-date" class="form-label">{t.contact.form.events.dateLabel}</label>
+          <input type="date" id="event-date" name="event_date" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">{t.contact.form.events.addonsLabel}</label>
+          <div class="checkbox-grid">
+            <label class="checkbox-pill checkbox-pill--included">
+              <input type="checkbox" checked aria-hidden="true" tabindex="-1" data-included />
+              <span>{t.contact.form.events.addonFacepainting}</span>
+              <em>{t.contact.form.events.includedLabel}</em>
+            </label>
+            <label class="checkbox-pill">
+              <input type="checkbox" name="addon_rental" value="da" />
+              <span>{t.contact.form.events.addonRental}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="service-section" data-service="najam-opreme" hidden>
+        <div class="form-group">
+          <label for="rental-location" class="form-label">{t.contact.form.rental.locationLabel}</label>
+          <input
+            type="text"
+            id="rental-location"
+            name="rental_location"
+            class="form-input"
+            placeholder={t.contact.form.rental.locationPlaceholder}
+          />
+        </div>
+        <div class="form-group">
+          <label for="rental-date" class="form-label">{t.contact.form.rental.dateLabel}</label>
+          <input type="date" id="rental-date" name="rental_date" class="form-input" />
+        </div>
+      </div>
+
+      <div class="equipment-section" hidden>
+        <div class="form-group">
+          <label class="form-label">{t.contact.form.equipmentLegend}</label>
+          <div class="checkbox-grid" role="group" aria-label={t.contact.form.equipmentAria}>
+            <label class="checkbox-pill">
+              <input type="checkbox" name="equipment" value="mini-set" />
+              <span>{t.contact.form.equipmentOptions.mini}</span>
+            </label>
+            <label class="checkbox-pill">
+              <input type="checkbox" name="equipment" value="maxi-set" />
+              <span>{t.contact.form.equipmentOptions.maxi}</span>
+            </label>
+            <label class="checkbox-pill">
+              <input type="checkbox" name="equipment" value="beige-set" />
+              <span>{t.contact.form.equipmentOptions.beige}</span>
+            </label>
+            <label class="checkbox-pill">
+              <input type="checkbox" name="equipment" value="mini-dvorac" />
+              <span>{t.contact.form.equipmentOptions.castle}</span>
+            </label>
+            <label class="checkbox-pill">
+              <input type="checkbox" name="equipment" value="combo-mini-dvorac" />
+              <span>{t.contact.form.equipmentOptions.comboMini}</span>
+            </label>
+            <label class="checkbox-pill">
+              <input type="checkbox" name="equipment" value="combo-maxi-dvorac" />
+              <span>{t.contact.form.equipmentOptions.comboMaxi}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="ball-section" hidden>
+        <div class="form-group">
+          <label class="form-label">{t.contact.form.ballLegend}</label>
+          <div class="radio-grid" role="radiogroup" aria-label={t.contact.form.ballAria}>
+            <label class="radio-pill">
+              <input type="radio" name="ball_color" value="bijela" />
+              <span>{t.contact.form.ballOptions.white}</span>
+            </label>
+            <label class="radio-pill">
+              <input type="radio" name="ball_color" value="plava" />
+              <span>{t.contact.form.ballOptions.blue}</span>
+            </label>
+            <label class="radio-pill">
+              <input type="radio" name="ball_color" value="roza" />
+              <span>{t.contact.form.ballOptions.pink}</span>
+            </label>
+            <label class="radio-pill">
+              <input type="radio" name="ball_color" value="tirkizna" />
+              <span>{t.contact.form.ballOptions.turquoise}</span>
+            </label>
+            <label class="radio-pill">
+              <input type="radio" name="ball_color" value="zlatna" />
+              <span>{t.contact.form.ballOptions.gold}</span>
+            </label>
+            <label class="radio-pill">
+              <input type="radio" name="ball_color" value="zuta" />
+              <span>{t.contact.form.ballOptions.yellow}</span>
+            </label>
+          </div>
+        </div>
       </div>
 
       <div class="form-group">
-        <label for="contact-message" class="form-label">Poruka</label>
+        <label for="contact-message" class="form-label">{t.contact.form.messageLabel}</label>
         <textarea
           id="contact-message"
           name="message"
           rows="4"
-          required
           maxlength="2000"
-          placeholder="Opišite vaš event, datum, broj djece..."
+          placeholder={t.contact.form.messagePlaceholder}
           class="form-input form-textarea"
         ></textarea>
       </div>
 
+      <div class="form-group form-group--consent">
+        <label class="consent-checkbox">
+          <input type="checkbox" name="photo_consent" value="da" />
+          <span>{t.contact.form.photoConsent}</span>
+        </label>
+      </div>
+
       <button type="submit" class="btn-primary form-submit">
-        Pošalji upit
+        {t.contact.form.submitLabel}
       </button>
 
+      {turnstileSiteKey && (
+        <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-size="invisible" data-refresh-expired="auto"></div>
+      )}
+
       <p class="form-consent">
-        Slanjem upita prihvaćate naše
-        <a href="/opci-uvjeti" target="_blank" rel="noopener noreferrer">Opće uvjete korištenja</a>
-        i
-        <a href="/politika-privatnosti" target="_blank" rel="noopener noreferrer">Politiku privatnosti</a>.
+        {t.contact.form.consentPrefix}{" "}
+        <a href={buildPath("/opci-uvjeti")} target="_blank" rel="noopener noreferrer">
+          {t.contact.form.termsLabel}
+        </a>{" "}
+        {t.contact.form.consentAnd}{" "}
+        <a href={buildPath("/politika-privatnosti")} target="_blank" rel="noopener noreferrer">
+          {t.contact.form.privacyLabel}
+        </a>
+        {t.contact.form.consentSuffix}
       </p>
 
-      <div id="form-status" class="form-status" aria-live="polite"></div>
+      <div id="form-status" class="form-status" aria-live="polite" data-status-labels={JSON.stringify(t.contact.form.status)}></div>
     </form>
   </div>
 </div>
+
+{turnstileSiteKey && (
+  <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+)}
 
 <style>
   .contact-toggle-input {
     display: none;
   }
 
-  /* bots fill this; humans never see it */
   .hp-field {
     position: absolute;
     left: -9999px;
@@ -133,25 +352,22 @@
   .contact-backdrop {
     position: absolute;
     inset: 0;
-    background-color: rgba(44, 44, 44, 0.4);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    background-color: rgba(44, 44, 44, 0.42);
     cursor: pointer;
+    border: none;
+    padding: 0;
   }
 
   .contact-modal {
     position: relative;
-    background-color: var(--cream);
-    border-radius: var(--radius-brand);
-    padding: 40px;
+    background-color: var(--paper);
+    border: 1px solid rgba(44, 44, 44, 0.08);
+    padding: 36px;
     width: 100%;
-    max-width: 480px;
+    max-width: 520px;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow:
-      0 4px 12px rgba(44, 44, 44, 0.08),
-      0 24px 64px rgba(44, 44, 44, 0.16);
-    transform: translateY(12px);
+    transform: translateY(8px);
     transition: transform 0.3s ease;
   }
 
@@ -167,8 +383,7 @@
   }
 
   .contact-modal-header h3 {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 600;
     color: var(--dark);
   }
@@ -179,59 +394,258 @@
     justify-content: center;
     width: 36px;
     height: 36px;
-    border-radius: 50%;
+    border-radius: 6px;
+    border: none;
+    padding: 0;
+    background: transparent;
     color: var(--charcoal-gray);
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: color 0.2s ease;
   }
 
   .contact-close:hover {
-    background-color: rgba(186, 168, 152, 0.15);
+    color: var(--dark);
   }
 
   .contact-intro {
-    font-size: 0.9rem;
+    font-size: 1.02rem;
     color: var(--charcoal-gray);
-    margin-bottom: 28px;
+    margin-bottom: 24px;
   }
 
   .form-group {
     margin-bottom: 20px;
   }
 
-  .form-label {
-    display: block;
-    font-size: 0.825rem;
+  .form-group--consent {
+    margin-top: 6px;
+  }
+
+  .form-group--service {
+    margin-bottom: 26px;
+    border: none;
+    padding: 0;
+  }
+
+  .service-options,
+  .checkbox-grid,
+  .radio-grid {
+    display: grid;
+    gap: 10px;
+  }
+
+  .service-options {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+
+  .checkbox-grid,
+  .radio-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+
+  .service-pill,
+  .checkbox-pill,
+  .radio-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(44, 44, 44, 0.16);
+    background: var(--paper);
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .consent-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: var(--charcoal-gray);
+    line-height: 1.45;
+  }
+
+  .consent-checkbox input {
+    margin-top: 4px;
+    width: 14px;
+    height: 14px;
+    accent-color: var(--dark);
+  }
+
+  .service-pill input {
+    position: absolute;
+    opacity: 0;
+  }
+
+  .checkbox-pill input,
+  .radio-pill input {
+    opacity: 1;
+    position: static;
+    margin: 0;
+    width: 14px;
+    height: 14px;
+    accent-color: var(--dark);
+  }
+
+  .service-pill span,
+  .checkbox-pill span,
+  .radio-pill span {
+    font-size: 0.92rem;
+    color: var(--charcoal-gray);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .service-pill span {
+    white-space: nowrap;
+  }
+
+  .service-pill span::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid rgba(44, 44, 44, 0.4);
+    background: transparent;
+  }
+
+  .service-pill input:focus-visible + span,
+  .checkbox-pill input:focus-visible + span,
+  .radio-pill input:focus-visible + span {
+    outline: 2px solid var(--dark);
+    outline-offset: 3px;
+  }
+
+  .service-pill input:checked + span,
+  .checkbox-pill input:checked + span,
+  .radio-pill input:checked + span {
     font-weight: 600;
     color: var(--dark);
-    margin-bottom: 6px;
+  }
+
+  .service-pill input:checked + span::before {
+    background: var(--dark);
+    border-color: var(--dark);
+  }
+
+  .service-pill input:checked,
+  .checkbox-pill input:checked,
+  .radio-pill input:checked {
+    accent-color: var(--dark);
+  }
+
+  .service-pill:has(input:checked),
+  .checkbox-pill:has(input:checked),
+  .radio-pill:has(input:checked) {
+    border-color: rgba(44, 44, 44, 0.4);
+    background-color: rgba(44, 44, 44, 0.04);
+  }
+
+  .checkbox-pill:has(input:disabled):not(.checkbox-pill--included),
+  .radio-pill:has(input:disabled) {
+    border-color: rgba(44, 44, 44, 0.12);
+    background-color: rgba(44, 44, 44, 0.02);
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .checkbox-pill--included,
+  .checkbox-pill--included:has(input:checked) {
+    cursor: default;
+    opacity: 1;
+    border-color: rgba(44, 44, 44, 0.28);
+    background-color: rgba(186, 218, 144, 0.3);
+    gap: 8px;
+  }
+
+  .checkbox-pill--included input {
+    pointer-events: none;
+    accent-color: var(--dark);
+    opacity: 1;
+  }
+
+  .checkbox-pill--included em {
+    font-style: normal;
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--dark);
+    background: rgba(44, 44, 44, 0.08);
+    padding: 3px 8px;
+    border-radius: 999px;
+    margin-left: auto;
+  }
+
+  .checkbox-pill:has(input:disabled) span,
+  .radio-pill:has(input:disabled) span {
+    color: rgba(44, 44, 44, 0.45);
+  }
+
+  .service-note {
+    font-size: 0.9rem;
+    color: rgba(44, 44, 44, 0.7);
+    margin-bottom: 16px;
+  }
+
+  .service-help {
+    font-size: 0.82rem;
+    color: rgba(44, 44, 44, 0.6);
+    margin-top: 10px;
+  }
+
+  .service-section {
+    margin-bottom: 18px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(44, 44, 44, 0.08);
+  }
+
+  .equipment-section,
+  .ball-section {
+    margin-bottom: 18px;
+  }
+
+  .cf-turnstile {
+    margin: 0;
+    line-height: 0;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--dark);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
   }
 
   .form-input {
     width: 100%;
-    padding: 12px 16px;
+    padding: 13px 14px;
     font-family: var(--font-body);
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: var(--dark);
-    background-color: rgba(253, 251, 247, 0.8);
-    border: 1.5px solid rgba(186, 168, 152, 0.4);
-    border-radius: 14px;
+    background-color: var(--paper);
+    border: 1px solid rgba(44, 44, 44, 0.16);
+    border-radius: 6px;
     outline: none;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
   .form-input::placeholder {
-    color: var(--taupe);
+    color: rgba(44, 44, 44, 0.44);
   }
 
   .form-input:focus {
-    border-color: var(--sky-blue);
-    box-shadow: 0 0 0 3px rgba(141, 216, 236, 0.2);
+    border-color: var(--dark);
+    box-shadow: 0 0 0 2px rgba(44, 44, 44, 0.08);
   }
 
   .form-select {
     appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%236B6B6B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%232C2C2C' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 16px center;
     padding-right: 44px;
@@ -249,43 +663,50 @@
 
   .form-consent {
     margin-top: 12px;
-    font-size: 0.775rem;
-    color: var(--taupe);
-    text-align: center;
+    font-size: 0.84rem;
+    color: rgba(44, 44, 44, 0.58);
     line-height: 1.55;
     max-width: none;
   }
 
   .form-consent a {
-    color: var(--charcoal-gray);
+    color: var(--dark);
     text-decoration: underline;
     text-underline-offset: 2px;
-    transition: color 0.2s ease;
+    transition: opacity 0.2s ease;
   }
 
   .form-consent a:hover {
-    color: var(--dark);
+    opacity: 0.75;
   }
 
   .form-status {
-    text-align: center;
-    margin-top: 12px;
-    font-size: 0.85rem;
+    text-align: left;
+    margin-top: 6px;
+    font-size: 0.9rem;
     font-weight: 500;
-    min-height: 24px;
+    min-height: 6px;
   }
 
   .form-status.success {
-    color: var(--sage-green);
+    color: #4f6b3c;
   }
 
   .form-status.error {
-    color: #D46B6B;
+    color: #a44949;
   }
 
   @media (max-width: 480px) {
     .contact-modal {
-      padding: 28px 20px;
+      padding: 24px 18px;
+    }
+
+    .service-options {
+      grid-template-columns: 1fr;
+    }
+
+    .service-pill span {
+      white-space: normal;
     }
   }
 
@@ -301,12 +722,42 @@
   const form = document.getElementById('contact-form') as HTMLFormElement;
   const status = document.getElementById('form-status') as HTMLDivElement;
   const submitBtn = form?.querySelector('.form-submit') as HTMLButtonElement;
+  const statusLabels = JSON.parse(status?.dataset.statusLabels || '{}');
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    status.textContent = 'Šaljem...';
+    status.textContent = '';
+    status.className = 'form-status';
+    status.textContent = statusLabels.sending;
     status.className = 'form-status';
     submitBtn.disabled = true;
+
+    const service = form?.querySelector('input[name="service"]:checked') as HTMLInputElement | null;
+    const equipmentChecked = form?.querySelectorAll<HTMLInputElement>('input[name="equipment"]:checked') || [];
+    const ballColor = form?.querySelector<HTMLInputElement>('input[name="ball_color"]:checked');
+
+    if (!service) {
+      status.textContent = statusLabels.selectService;
+      status.className = 'form-status error';
+      submitBtn.disabled = false;
+      return;
+    }
+
+    if (equipmentSection?.hidden === false) {
+      if (equipmentChecked.length === 0) {
+        status.textContent = statusLabels.selectEquipment;
+        status.className = 'form-status error';
+        submitBtn.disabled = false;
+        return;
+      }
+    }
+
+    if (ballSection?.hidden === false && !ballColor) {
+      status.textContent = statusLabels.selectBall;
+      status.className = 'form-status error';
+      submitBtn.disabled = false;
+      return;
+    }
 
     try {
       const formData = new FormData(form);
@@ -318,18 +769,173 @@
       const data = await res.json();
 
       if (res.ok && data.success) {
-        status.textContent = 'Hvala! Vaš upit je poslan. Javit ćemo vam se uskoro.';
+        status.textContent = statusLabels.success;
         status.className = 'form-status success';
         form.reset();
+        (window as any).turnstile?.reset('.cf-turnstile');
       } else {
-        status.textContent = data.error || 'Došlo je do greške. Pokušajte ponovo.';
+        status.textContent = data.error || statusLabels.error;
         status.className = 'form-status error';
       }
     } catch {
-      status.textContent = 'Greška u mreži. Provjerite vezu i pokušajte ponovo.';
+      status.textContent = statusLabels.networkError;
       status.className = 'form-status error';
     } finally {
       submitBtn.disabled = false;
     }
   });
+
+  const toggle = document.getElementById('contact-toggle') as HTMLInputElement | null;
+  const closeButtons = document.querySelectorAll<HTMLButtonElement>('.contact-backdrop, .contact-close');
+
+  const serviceRadios = document.querySelectorAll<HTMLInputElement>('input[name="service"]');
+  const serviceSections = document.querySelectorAll<HTMLElement>('.service-section');
+  const equipmentSection = document.querySelector<HTMLElement>('.equipment-section');
+  const ballSection = document.querySelector<HTMLElement>('.ball-section');
+  const addonInputs = document.querySelectorAll<HTMLInputElement>('input[name="addon_rental"]');
+  const equipmentInputs = document.querySelectorAll<HTMLInputElement>('input[name="equipment"]');
+  const ballInputs = document.querySelectorAll<HTMLInputElement>('input[name="ball_color"]');
+
+  const comboMini = form?.querySelector<HTMLInputElement>('input[name="equipment"][value="combo-mini-dvorac"]') || null;
+  const comboMaxi = form?.querySelector<HTMLInputElement>('input[name="equipment"][value="combo-maxi-dvorac"]') || null;
+  const miniSet = form?.querySelector<HTMLInputElement>('input[name="equipment"][value="mini-set"]') || null;
+  const maxiSet = form?.querySelector<HTMLInputElement>('input[name="equipment"][value="maxi-set"]') || null;
+  const miniDvorac = form?.querySelector<HTMLInputElement>('input[name="equipment"][value="mini-dvorac"]') || null;
+
+  const requiredInSection = (section: HTMLElement, required: boolean) => {
+    section.querySelectorAll<HTMLInputElement>('input, textarea, select').forEach((field) => {
+      if (required) {
+        if (field.type !== 'checkbox' && field.type !== 'radio') {
+          field.required = true;
+        }
+      } else {
+        field.required = false;
+      }
+    });
+  };
+
+  const clearSection = (section: HTMLElement) => {
+    section.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea').forEach((field) => {
+      if (field instanceof HTMLInputElement) {
+        if (field.type === 'checkbox' || field.type === 'radio') {
+          field.checked = false;
+        } else {
+          field.value = '';
+        }
+      } else {
+        field.value = '';
+      }
+    });
+  };
+
+  const updateComboState = () => {
+    if (!comboMini || !comboMaxi) return;
+
+    if (!comboMini.checked && miniSet?.checked && miniDvorac?.checked) {
+      miniSet.checked = false;
+      miniDvorac.checked = false;
+      comboMini.checked = true;
+    }
+
+    if (!comboMaxi.checked && maxiSet?.checked && miniDvorac?.checked) {
+      maxiSet.checked = false;
+      miniDvorac.checked = false;
+      comboMaxi.checked = true;
+    }
+
+    if (comboMini.checked) {
+      if (miniSet) miniSet.checked = false;
+      if (miniDvorac) miniDvorac.checked = false;
+      if (miniSet) miniSet.disabled = true;
+      if (miniDvorac) miniDvorac.disabled = true;
+    } else {
+      if (miniSet) miniSet.disabled = false;
+      if (miniDvorac) miniDvorac.disabled = false;
+    }
+
+    if (comboMaxi.checked) {
+      if (maxiSet) maxiSet.checked = false;
+      if (miniDvorac) miniDvorac.checked = false;
+      if (maxiSet) maxiSet.disabled = true;
+      if (miniDvorac) miniDvorac.disabled = true;
+    } else if (!comboMini.checked) {
+      if (maxiSet) maxiSet.disabled = false;
+      if (miniDvorac) miniDvorac.disabled = false;
+    }
+  };
+
+  const updateBallColors = () => {
+    if (!ballSection) return;
+    const checked = Array.from(equipmentInputs).filter((input) => input.checked).map((input) => input.value);
+    const onlyMiniDvorac = checked.length === 1 && checked[0] === 'mini-dvorac';
+    const shouldShow = checked.length > 0 && !onlyMiniDvorac;
+    ballSection.hidden = !shouldShow;
+    ballInputs.forEach((input) => {
+      input.required = shouldShow;
+      if (!shouldShow) input.checked = false;
+    });
+  };
+
+  const updateEquipmentVisibility = () => {
+    if (!equipmentSection) return;
+    const service = form?.querySelector<HTMLInputElement>('input[name="service"]:checked');
+    const isRentalService = service?.value === 'najam-opreme';
+    const addonSelected = Array.from(addonInputs).some((input) => input.checked);
+    const shouldShow = isRentalService || addonSelected;
+    equipmentSection.hidden = !shouldShow;
+    equipmentInputs.forEach((input) => {
+      input.required = false;
+      if (!shouldShow) input.checked = false;
+    });
+  };
+
+  const updateServiceSections = () => {
+    const selected = form?.querySelector<HTMLInputElement>('input[name="service"]:checked')?.value;
+    serviceSections.forEach((section) => {
+      const active = section.dataset.service === selected;
+      section.hidden = !active;
+      if (active) {
+        requiredInSection(section, true);
+      } else {
+        requiredInSection(section, false);
+        clearSection(section);
+      }
+    });
+
+    document.querySelectorAll<HTMLInputElement>('[data-included]').forEach((input) => {
+      input.checked = true;
+    });
+  };
+
+  const updateAllVisibility = () => {
+    updateEquipmentVisibility();
+    updateComboState();
+    updateBallColors();
+  };
+
+  serviceRadios.forEach((radio) => radio.addEventListener('change', () => {
+    updateServiceSections();
+    updateAllVisibility();
+  }));
+  addonInputs.forEach((input) => input.addEventListener('change', updateAllVisibility));
+  equipmentInputs.forEach((input) => input.addEventListener('change', () => {
+    updateComboState();
+    updateBallColors();
+  }));
+
+  closeButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (toggle) toggle.checked = false;
+    });
+  });
+
+  document.querySelectorAll<HTMLInputElement>('[data-included]').forEach((input) => {
+    input.addEventListener('click', (event) => {
+      event.preventDefault();
+      input.checked = true;
+    });
+  });
+
+  updateServiceSections();
+  updateAllVisibility();
 </script>

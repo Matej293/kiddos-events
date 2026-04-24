@@ -2,96 +2,107 @@
 import Layout from "../layouts/Layout.astro";
 import Navigation from "../components/Navigation.astro";
 import Footer from "../components/Footer.astro";
+import hr from "../i18n/hr";
+
+const t = hr;
+const basePath = "";
 ---
 
 <Layout
-  title="Politika privatnosti | Kiddos Events"
-  description="Politika privatnosti web stranice Kiddos Events."
+  title={t.meta.privacy.title}
+  description={t.meta.privacy.description}
+  locale={t.locale}
+  language={t.lang}
+  t={t}
+  basePath={basePath}
 >
-  <Navigation />
+  <Navigation t={t} basePath={basePath} />
   <main>
     <section class="legal-hero">
       <div class="container">
-        <span class="section-tag">Pravni dokumenti</span>
-        <h1>Politika privatnosti</h1>
-        <p class="legal-meta">Kiddos Events d.o.o.</p>
+        <p class="legal-eyebrow">{t.legal.eyebrow}</p>
+        <h1>{t.legal.privacy.heading}</h1>
+        <p class="legal-meta">{t.legal.company}</p>
       </div>
     </section>
 
     <section class="legal-content section">
       <div class="container legal-body">
-        <p class="placeholder-notice">
-          Sadržaj ovog dokumenta bit će uskoro dostupan.
-        </p>
+        {t.legal.privacy.sections.map((section: { title: string; paragraphs?: readonly string[]; email?: string; emailSuffix?: string }) => (
+          <section>
+            <h2>{section.title}</h2>
+            {section.paragraphs?.map((text: string, paragraphIndex: number) => (
+              <p>
+                {text}
+                {section.email && paragraphIndex === 1 ? (
+                  <>
+                    {" "}
+                    <a href={`mailto:${section.email}`}>{section.email}</a>
+                    {section.emailSuffix ?? ""}
+                  </>
+                ) : null}
+              </p>
+            ))}
+          </section>
+        ))}
       </div>
     </section>
   </main>
-  <Footer />
+  <Footer t={t} basePath={basePath} />
 </Layout>
 
 <style>
   .legal-hero {
-    padding: 120px 0 48px;
-    background:
-      radial-gradient(
-        ellipse at 80% 60%,
-        rgba(242, 190, 206, 0.06) 0%,
-        transparent 55%
-      ),
-      radial-gradient(
-        ellipse at 20% 30%,
-        rgba(186, 218, 144, 0.04) 0%,
-        transparent 55%
-      ),
-      var(--cream);
-    border-bottom: 1px solid rgba(186, 168, 152, 0.2);
+    padding: calc(var(--section-gap-desktop) + 32px) 0 56px;
+    background: var(--paper);
+    border-bottom: 1px solid rgba(44, 44, 44, 0.08);
   }
 
-  .legal-hero .section-tag {
+  .legal-eyebrow {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--dark);
     margin-bottom: 20px;
+    max-width: none;
   }
 
   .legal-hero h1 {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(1.75rem, 3.5vw, 2.75rem);
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    color: var(--dark);
+    font-size: clamp(1.95rem, 3.7vw, 3rem);
+    font-weight: 600;
     margin-bottom: 12px;
     max-width: 720px;
   }
 
   .legal-meta {
-    font-size: 0.875rem;
-    color: var(--taupe);
+    font-size: 0.94rem;
+    color: rgba(44, 44, 44, 0.6);
     max-width: none;
   }
 
   .legal-content {
-    background: var(--cream);
+    background: var(--paper);
   }
 
   .legal-body {
     max-width: 760px;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1rem;
+    font-size: 1.04rem;
     line-height: 1.8;
     color: var(--charcoal-gray);
   }
 
   .legal-body h2 {
-    font-family: Georgia, "Times New Roman", serif;
     font-size: 1.25rem;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--dark);
     margin-top: 40px;
     margin-bottom: 12px;
   }
 
   .legal-body h3 {
-    font-family: Georgia, "Times New Roman", serif;
     font-size: 1.05rem;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--dark);
     margin-top: 28px;
     margin-bottom: 8px;
@@ -112,10 +123,15 @@ import Footer from "../components/Footer.astro";
   }
 
   .placeholder-notice {
-    color: var(--taupe);
-    font-style: italic;
-    font-size: 1rem;
+    color: rgba(44, 44, 44, 0.6);
+    font-size: 1.04rem;
     padding: 32px 0;
     max-width: none;
+  }
+
+  @media (max-width: 768px) {
+    .legal-hero {
+      padding-top: calc(var(--section-gap-mobile) + var(--nav-clearance-mobile));
+    }
   }
 </style>
