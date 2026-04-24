@@ -1,5 +1,7 @@
 ---
+import { env } from 'cloudflare:workers';
 const { t, basePath = "" } = Astro.props;
+const turnstileSiteKey = env.PUBLIC_TURNSTILE_SITE_KEY || import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 const buildPath = (path: string) => {
   if (!basePath) return path;
   return path === "/" ? basePath : `${basePath}${path}`;
@@ -285,7 +287,7 @@ const buildPath = (path: string) => {
         </label>
       </div>
 
-      <div class="cf-turnstile" data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY} data-size="flexible" data-refresh-expired="auto"></div>
+      <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-size="flexible" data-refresh-expired="auto"></div>
 
       <button type="submit" class="btn-primary form-submit">
         {t.contact.form.submitLabel}
