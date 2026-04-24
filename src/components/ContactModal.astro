@@ -1,6 +1,5 @@
 ---
 const { t, basePath = "" } = Astro.props;
-const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || "";
 const buildPath = (path: string) => {
   if (!basePath) return path;
   return path === "/" ? basePath : `${basePath}${path}`;
@@ -286,9 +285,7 @@ const buildPath = (path: string) => {
         </label>
       </div>
 
-      {turnstileSiteKey && (
-        <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-size="flexible" data-refresh-expired="auto"></div>
-      )}
+      <div class="cf-turnstile" data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY} data-size="flexible" data-refresh-expired="auto"></div>
 
       <button type="submit" class="btn-primary form-submit">
         {t.contact.form.submitLabel}
@@ -311,9 +308,7 @@ const buildPath = (path: string) => {
   </div>
 </div>
 
-{turnstileSiteKey && (
-  <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-)}
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
 <style>
   .contact-toggle-input {
