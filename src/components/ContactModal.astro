@@ -286,13 +286,13 @@ const buildPath = (path: string) => {
         </label>
       </div>
 
+      {turnstileSiteKey && (
+        <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-size="flexible" data-refresh-expired="auto"></div>
+      )}
+
       <button type="submit" class="btn-primary form-submit">
         {t.contact.form.submitLabel}
       </button>
-
-      {turnstileSiteKey && (
-        <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-size="invisible" data-refresh-expired="auto"></div>
-      )}
 
       <p class="form-consent">
         {t.contact.form.consentPrefix}{" "}
@@ -606,11 +606,6 @@ const buildPath = (path: string) => {
     margin-bottom: 18px;
   }
 
-  .cf-turnstile {
-    margin: 0;
-    line-height: 0;
-  }
-
   .form-label {
     display: block;
     font-size: 0.84rem;
@@ -695,6 +690,15 @@ const buildPath = (path: string) => {
   .form-status.error {
     color: #a44949;
   }
+
+  .cf-turnstile {
+    width: 100% !important;
+    margin-top: 4px;
+  }
+  .cf-turnstile iframe {
+    width: 100% !important;
+  }
+
 
   @media (max-width: 480px) {
     .contact-modal {
